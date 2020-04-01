@@ -937,25 +937,23 @@ var Ncov = /*#__PURE__*/function () {
                   title: 'ncov',
                   url: 'https://corona.lmao.ninja/countries',
                   prep: function prep(samples) {
-                    var _fields;
-
                     var countryInfos = samples.map(function (s) {
                       var _ref2;
 
                       s[DEATHRATE] = (_ref2 = s[DEATHS] / s[CASES] * 100) === null || _ref2 === void 0 ? void 0 : _ref2.toFixed(2);
                       return s[COUNTRY_INFO];
                     });
-                    fields = (_fields = fields) !== null && _fields !== void 0 ? _fields : FIELDS;
-                    var table$1 = table.Table.from(convert.samplesToTable(samples, fields)).unshiftColumn(CODE, countryInfos.map(function (_ref3) {
+                    var table$1 = table.Table.from(convert.samplesToTable(samples, fields !== null && fields !== void 0 ? fields : FIELDS)).unshiftColumn(CODE, countryInfos.map(function (_ref3) {
                       var iso3 = _ref3.iso3;
                       return iso3;
                     })).mutateColumn(UPDATED, function (x) {
                       return new Date(x);
                     });
-                    if (fields.includes(DEATHESINML)) table$1.mutateColumn(DEATHESINML, function (x) {
+                    var head = table$1.head;
+                    if (head.includes(DEATHESINML)) table$1.mutateColumn(DEATHESINML, function (x) {
                       return x === null || x === void 0 ? void 0 : x.toFixed(2);
                     });
-                    if (sortBy && fields.includes(sortBy)) table$1.sort(sortBy, comparer.NUM_DESC, enumMutabilities.MUTABLE);
+                    if (sortBy && head.includes(sortBy)) table$1.sort(sortBy, comparer.NUM_DESC, enumMutabilities.MUTABLE);
                     if (top) table$1.rows.splice(top);
                     return table$1;
                   },

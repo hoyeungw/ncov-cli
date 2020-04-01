@@ -87,3 +87,7 @@ export class NcovCli {
       })
   }
 }
+
+if (process.argv[2] === 'start') NcovCli.start().then()
+
+

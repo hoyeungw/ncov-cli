@@ -1128,5 +1128,6 @@ var NcovCli = /*#__PURE__*/function () {
 
   return NcovCli;
 }();
+if (process.argv[2] === 'start') NcovCli.start().then();
 
 exports.NcovCli = NcovCli;

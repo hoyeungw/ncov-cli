@@ -1,0 +1,93 @@
+{
+  "name": "ncov-cli",
+  "version": "0.0.0",
+  "description": "ncov latest update on cli",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "app": "node script/run-cli.js",
+    "upint": "yarn upgrade-interactive --latest",
+    "build": "rollup -c rollup.config.js",
+    "watch": "rollup -c rollup.config.js -w"
+  },
+  "bin": {
+    "ncov": "script/run-cli.js",
+    "ncov-cli": "script/run-cli.js"
+  },
+  "dependencies": {
+    "cfonts": "^2.8.1",
+    "inquirer": "^7.1.0",
+    "ora": "^4.0.3",
+    "@acq/acq": "^0.2.0",
+    "@spare/logger": "^0.4.7",
+    "@spare/phrasing": "^0.4.7",
+    "@spare/enum-chars": "^0.4.7",
+    "@spare/deco-flat": "^0.4.7",
+    "@spare/xr": "^0.4.7",
+    "@analys/enum-tabular-types": "^0.1.5",
+    "@analys/convert": "^0.0.14",
+    "@analys/table": "^0.1.5",
+    "@analys/enum-mutabilities": "^0.1.5",
+    "@aryth/comparer": "^0.1.0",
+    "@aryth/math": "^0.1.0",
+    "@palett/cards": "^0.1.1",
+    "@palett/fluo-vector": "^0.1.1",
+    "@vect/vector-init": "^0.2.0",
+    "@vect/vector-zipper": "^0.2.0",
+    "@vect/object-init": "^0.2.0",
+    "@vect/merge-acquire": "^0.2.0",
+    "@valjoux/timestamp": "^0.0.5",
+    "@cliche/mag": "^0.0.4",
+    "@typen/enum-data-types": "^0.0.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/node": "^7.8.7",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-optional-chaining": "^7.9.0",
+    "@babel/plugin-proposal-pipeline-operator": "^7.8.3",
+    "@babel/plugin-proposal-private-methods": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "@babel/register": "^7.9.0",
+    "@babel/runtime": "^7.9.2",
+    "@palett/says": "^0.1.1",
+    "@rollup/plugin-commonjs": "^11.0.2",
+    "@rollup/plugin-json": "^4.0.2",
+    "@rollup/plugin-node-resolve": "^7.1.1",
+    "@spare/logger": "^0.4.7",
+    "rollup": "^2.3.1",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-clear": "^2.0.7",
+    "rollup-plugin-filesize": "^6.2.1",
+    "rollup-plugin-progress": "^1.1.1",
+    "rollup-plugin-terser": "^5.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hoyeungw/ncov-cli.git"
+  },
+  "keywords": [
+    "ncov",
+    "corona",
+    "covid",
+    "cdc",
+    "virus"
+  ],
+  "engines": {
+    "node": ">=12.x"
+  },
+  "author": {
+    "name": "Hoyeung Wong",
+    "email": "hoyeungw@outlook.com",
+    "url": "https://github.com/hoyeungw"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hoyeungw/ncov-cli.git"
+  },
+  "homepage": "https://github.com/hoyeungw/ncov-cli#readme"
+}

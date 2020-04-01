@@ -9,20 +9,6 @@ const { name, dependencies, main, module } = require(process.cwd() + '/package.j
 console.log('EXECUTING', name, process.cwd())
 console.log('Dependencies', dependencies)
 
-const babelPluginOptions = {
-  babelrc: false,
-  comments: true,
-  sourceMap: true,
-  exclude: 'node_modules/**',
-  plugins: [
-    ['@babel/plugin-transform-runtime', { helpers: false, }],
-    ['@babel/plugin-proposal-pipeline-operator', { proposal: 'minimal' }],
-    ['@babel/plugin-proposal-class-properties'],
-    ['@babel/plugin-proposal-private-methods'],
-    ['@babel/plugin-proposal-optional-chaining']
-  ]
-}
-
 export default [
   {
     input: 'index.js',
@@ -34,7 +20,20 @@ export default [
     plugins: [
       nodeResolve({ preferBuiltins: true }),
       commonjs({ include: 'node_modules/**' }),
-      babel(babelPluginOptions),
+      babel({
+        babelrc: false,
+        comments: true,
+        sourceMap: true,
+        exclude: 'node_modules/**',
+        plugins: [
+          ['@babel/transform-runtime', { helpers: false }],
+          ['@babel/plugin-proposal-class-properties'],
+          ['@babel/plugin-proposal-private-methods'],
+          ['@babel/plugin-proposal-optional-chaining'],
+          ['@babel/plugin-proposal-nullish-coalescing-operator'],
+          ['@babel/plugin-proposal-pipeline-operator', { proposal: 'minimal' }]
+        ]
+      }),
       json(),
       filesize()
     ]

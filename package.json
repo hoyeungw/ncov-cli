@@ -8,14 +8,14 @@
     "dist"
   ],
   "scripts": {
-    "app": "node dist/index.cjs.js start",
+    "app": "node src/script.js",
     "upint": "yarn upgrade-interactive --latest",
     "build": "rollup -c rollup.config.js",
     "watch": "rollup -c rollup.config.js -w"
   },
   "bin": {
-    "ncov": "dist/index.cjs.js start",
-    "ncov-cli": "dist/index.cjs.js start"
+    "ncov": "src/script.js",
+    "ncov-cli": "src/script.js"
   },
   "dependencies": {
     "@acq/acq": "^0.2.0",

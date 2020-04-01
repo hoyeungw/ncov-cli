@@ -3,7 +3,7 @@ import inquirer from 'inquirer'
 import ora from 'ora'
 import { Cards } from '@palett/cards'
 import { SAMPLES, TABLE } from '@analys/enum-tabular-types'
-import { decoSamples, DecoTable, says } from '@spare/logger'
+import { decoSamples, DecoTable, logger, says } from '@spare/logger'
 import { camelToSnake } from '@spare/phrasing'
 import { range } from '@vect/vector-init'
 import { fluoVector } from '@palett/fluo-vector'
@@ -33,6 +33,7 @@ export class NcovCli {
       maxLength: 16,              // define how many character can be on one line
       gradient: [Cards.cyan.accent_3, Cards.pink.lighten_2], // define your two gradient colors
     })
+    '' |> logger
 
     const { format, sortBy, top, fieldConfigs } = await inquirer.prompt([
       {
@@ -88,6 +89,6 @@ export class NcovCli {
   }
 }
 
-if (process.argv[2] === 'start') NcovCli.start().then()
+
 
 

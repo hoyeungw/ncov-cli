@@ -3,7 +3,7 @@ import inquirer from 'inquirer';
 import ora from 'ora';
 import { Cards } from '@palett/cards';
 import { TABLE, SAMPLES } from '@analys/enum-tabular-types';
-import { DecoTable, says, decoSamples } from '@spare/logger';
+import { DecoTable, says, decoSamples, logger } from '@spare/logger';
 import { camelToSnake } from '@spare/phrasing';
 import { range } from '@vect/vector-init';
 import { fluoVector } from '@palett/fluo-vector';
@@ -992,6 +992,8 @@ var NcovCli = /*#__PURE__*/function () {
     key: "start",
     value: function () {
       var _start = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee() {
+        var _ref;
+
         var _yield$inquirer$promp, format, sortBy, top, fieldConfigs, makeFields, spn;
 
         return regenerator.wrap(function _callee$(_context) {
@@ -1010,16 +1012,17 @@ var NcovCli = /*#__PURE__*/function () {
                   gradient: [Cards.cyan.accent_3, Cards.pink.lighten_2] // define your two gradient colors
 
                 });
-                _context.next = 3;
+                _ref = '', logger(_ref);
+                _context.next = 4;
                 return inquirer.prompt([{
                   name: 'sortBy',
                   type: LIST,
                   "default": 'cases',
                   message: 'By what field would you like to sort?',
-                  choices: FIELDS.map(function (_ref) {
-                    var _ref2 = _slicedToArray(_ref, 2),
-                        curr = _ref2[0],
-                        proj = _ref2[1];
+                  choices: FIELDS.map(function (_ref2) {
+                    var _ref3 = _slicedToArray(_ref2, 2),
+                        curr = _ref3[0],
+                        proj = _ref3[1];
 
                     return {
                       name: camelToSnake(curr, SP),
@@ -1067,7 +1070,7 @@ var NcovCli = /*#__PURE__*/function () {
                   }
                 }]);
 
-              case 3:
+              case 4:
                 _yield$inquirer$promp = _context.sent;
                 format = _yield$inquirer$promp.format;
                 sortBy = _yield$inquirer$promp.sortBy;
@@ -1075,9 +1078,9 @@ var NcovCli = /*#__PURE__*/function () {
                 fieldConfigs = _yield$inquirer$promp.fieldConfigs;
 
                 makeFields = function makeFields() {
-                  var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-                      today = _ref3.today,
-                      ratio = _ref3.ratio;
+                  var _ref4 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+                      today = _ref4.today,
+                      ratio = _ref4.ratio;
 
                   var fields = BASE_FIELDS;
                   if (today) acquire(fields, TODAY_FIELDS);
@@ -1086,25 +1089,25 @@ var NcovCli = /*#__PURE__*/function () {
                 };
 
                 spn = ora(Xr('updating')['sortBy'](sortBy)['top'](top)['timestamp'](now()).toString()).start();
-                _context.next = 12;
+                _context.next = 13;
                 return Ncov.latest({
                   format: format,
                   sortBy: sortBy,
                   top: top,
                   fields: makeFields(fieldConfigs)
                 }).then(function (result) {
-                  var _ref4, _result, _ref5, _result2;
+                  var _ref5, _result, _ref6, _result2;
 
                   spn.succeed(Xr('updated')['timestamp'](now()).toString());
-                  if (format === TABLE) _ref4 = (_result = result, DecoTable({
+                  if (format === TABLE) _ref5 = (_result = result, DecoTable({
                     read: function read(x) {
                       return _typeof(x) === NUM ? mag.format(x) : decoFlat(x);
                     }
-                  })(_result)), says['corona latest report'](_ref4);
-                  if (format === SAMPLES) _ref5 = (_result2 = result, decoSamples(_result2)), says['corona latest report'](_ref5);
+                  })(_result)), says['corona latest report'](_ref5);
+                  if (format === SAMPLES) _ref6 = (_result2 = result, decoSamples(_result2)), says['corona latest report'](_ref6);
                 });
 
-              case 12:
+              case 13:
               case "end":
                 return _context.stop();
             }
@@ -1122,6 +1125,5 @@ var NcovCli = /*#__PURE__*/function () {
 
   return NcovCli;
 }();
-if (process.argv[2] === 'start') NcovCli.start().then();
 
 export { NcovCli };

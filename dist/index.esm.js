@@ -889,7 +889,7 @@ function _nonIterableRest() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 
-var BASE_FIELDS = [['country', 'country'], ['cases', 'cases'], ['deaths', 'deaths'], ['recovered', 'recovered'], ['active', 'active'], ['critical', 'critical'], ['updated', 'updated']];
+var BASE_FIELDS = [['updated', 'updated'], ['country', 'country'], ['cases', 'cases'], ['deaths', 'deaths'], ['recovered', 'recovered'], ['active', 'active'], ['critical', 'critical']];
 var TODAY_FIELDS = [['todayCases', 'casesToday'], ['todayDeaths', 'deathsToday']];
 var RATIO_FIELDS = [['deathRate', 'death %'], ['casesPerOneMillion', 'cases/m*'], ['deathsPerOneMillion', 'deaths/m*']];
 var FIELDS = [].concat(BASE_FIELDS, TODAY_FIELDS, RATIO_FIELDS);
@@ -931,22 +931,25 @@ var Ncov = /*#__PURE__*/function () {
                   title: 'ncov',
                   url: 'https://corona.lmao.ninja/countries',
                   prep: function prep(samples) {
+                    var _fields;
+
                     var countryInfos = samples.map(function (s) {
                       var _ref2;
 
                       s[DEATHRATE] = (_ref2 = s[DEATHS] / s[CASES] * 100) === null || _ref2 === void 0 ? void 0 : _ref2.toFixed(2);
                       return s[COUNTRY_INFO];
                     });
-                    var table = Table.from(samplesToTable(samples, FIELDS)).unshiftColumn(CODE, countryInfos.map(function (_ref3) {
+                    fields = (_fields = fields) !== null && _fields !== void 0 ? _fields : FIELDS;
+                    var table = Table.from(samplesToTable(samples, fields)).unshiftColumn(CODE, countryInfos.map(function (_ref3) {
                       var iso3 = _ref3.iso3;
                       return iso3;
                     })).mutateColumn(UPDATED, function (x) {
                       return new Date(x);
-                    }).mutateColumn(DEATHESINML, function (x) {
+                    });
+                    if (fields.includes(DEATHESINML)) table.mutateColumn(DEATHESINML, function (x) {
                       return x === null || x === void 0 ? void 0 : x.toFixed(2);
                     });
-                    if (fields) table.select(fields, MUTABLE);
-                    if (sortBy && table.head.includes(sortBy)) table.sort(sortBy, NUM_DESC, MUTABLE);
+                    if (sortBy && fields.includes(sortBy)) table.sort(sortBy, NUM_DESC, MUTABLE);
                     if (top) table.rows.splice(top);
                     return table;
                   },

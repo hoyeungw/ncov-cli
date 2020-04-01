@@ -17,13 +17,13 @@ export class Ncov {
           s[DEATHRATE] = (s[DEATHS] / s[CASES] * 100)?.toFixed(2)
           return s[COUNTRY_INFO]
         })
+        fields = fields ?? FIELDS
         const table = Table
-          .from(samplesToTable(samples, FIELDS))
+          .from(samplesToTable(samples, fields))
           .unshiftColumn(CODE, countryInfos.map(({ iso3 }) => iso3))
           .mutateColumn(UPDATED, x => new Date(x))
-          .mutateColumn(DEATHESINML, x => x?.toFixed(2))
-        if (fields) table.select(fields, MUTABLE)
-        if (sortBy && table.head.includes(sortBy)) table.sort(sortBy, NUM_DESC, MUTABLE)
+        if (fields.includes(DEATHESINML)) table.mutateColumn(DEATHESINML, x => x?.toFixed(2))
+        if (sortBy && fields.includes(sortBy)) table.sort(sortBy, NUM_DESC, MUTABLE)
         if (top) table.rows.splice(top)
         return table
       },

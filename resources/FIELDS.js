@@ -1,11 +1,11 @@
 export const BASE_FIELDS=[
+  ['updated'            ,'updated'],
   ['country'            ,'country'],
   ['cases'              ,'cases'],
   ['deaths'             ,'deaths'],
   ['recovered'          ,'recovered'],
   ['active'             ,'active'],
   ['critical'           ,'critical'],
-  ['updated'            ,'updated'],
 ]
 
 export const TODAY_FIELDS=[

@@ -26,16 +26,19 @@
 
 ##### Get ncov latest update via interactive cli
 
+![preview-global](./media/screenshot.png)
+
 #### Features
 - Latest update on all countries.
 - Sort by columns.
 - Highlight values based on rank. 
 - Interactive command-line interface(cli).
+- Data source : [NovelCOVID API](https://github.com/NovelCOVID/API/)
 
 #### Install
 ```console
 # Install globally
-$ npm install -g ncov-cli
+$ npm i -g ncov-cli
 ```
 
 #### Usage
@@ -43,6 +46,9 @@ $ npm install -g ncov-cli
 $ ncov
 # Then follow instructions to see daily statistics.
 ```
+
+#### Requirement
+nodejs version 8 and above
 
 #### Meta
 [LICENSE (MIT)](LICENSE)

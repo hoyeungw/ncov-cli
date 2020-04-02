@@ -11,6 +11,7 @@ import { Xr } from '@spare/xr';
 import { now } from '@valjoux/timestamp';
 import { Mag } from '@cliche/mag';
 import { NUM } from '@typen/enum-data-types';
+import { LF } from '@spare/enum-chars';
 import { decoFlat } from '@spare/deco-flat';
 import { Acq } from '@acq/acq';
 import { Table } from '@analys/table';
@@ -162,8 +163,9 @@ const COLORED_RANGE200 = fluoVector(RANGE200);
 const mag = new Mag(0);
 class NcovCli {
   static async start() {
-    var _ref;
+    var _LF$repeat, _ref, _LF$repeat2;
 
+    _LF$repeat = LF.repeat(10), logger(_LF$repeat);
     CFonts.say('NCOV update', {
       font: 'simple',
       // define the font face
@@ -256,6 +258,7 @@ class NcovCli {
       })(_result)), says['corona latest report'](_ref2);
       if (format === SAMPLES) _ref3 = (_result2 = result, decoSamples(_result2)), says['corona latest report'](_ref3);
     });
+    _LF$repeat2 = LF.repeat(10), logger(_LF$repeat2);
   }
 
 }

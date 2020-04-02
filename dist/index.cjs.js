@@ -17,7 +17,6 @@ var xr = require('@spare/xr');
 var timestamp = require('@valjoux/timestamp');
 var mag$1 = require('@cliche/mag');
 var enumDataTypes = require('@typen/enum-data-types');
-var enumChars = require('@spare/enum-chars');
 var decoFlat = require('@spare/deco-flat');
 var acq = require('@acq/acq');
 var table = require('@analys/table');
@@ -169,9 +168,8 @@ const COLORED_RANGE200 = fluoVector.fluoVector(RANGE200);
 const mag = new mag$1.Mag(0);
 class NcovCli {
   static async start() {
-    var _LF$repeat, _ref, _LF$repeat2;
+    var _ref, _ref4;
 
-    _LF$repeat = enumChars.LF.repeat(10), logger.logger(_LF$repeat);
     CFonts.say('NCOV update', {
       font: 'simple',
       // define the font face
@@ -264,7 +262,7 @@ class NcovCli {
       })(_result)), logger.says['corona latest report'](_ref2);
       if (format === enumTabularTypes.SAMPLES) _ref3 = (_result2 = result, logger.decoSamples(_result2)), logger.says['corona latest report'](_ref3);
     });
-    _LF$repeat2 = enumChars.LF.repeat(10), logger.logger(_LF$repeat2);
+    _ref4 = '', logger.logger(_ref4);
   }
 
 }

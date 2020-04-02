@@ -11,7 +11,6 @@ import { Xr } from '@spare/xr'
 import { now } from '@valjoux/timestamp'
 import { Mag } from '@cliche/mag'
 import { NUM } from '@typen/enum-data-types'
-import { LF } from '@spare/enum-chars'
 import { decoFlat } from '@spare/deco-flat'
 import { Ncov } from './Ncov'
 import { FIELDS_CHECKBOX_OPTIONS_GLOBAL } from '../resources/fieldsGlobal'
@@ -26,7 +25,6 @@ const mag = new Mag(0)
 
 export class NcovCli {
   static async start () {
-    LF.repeat(10)|> logger
     CFonts.say('NCOV update', {
       font: 'simple',             // define the font face
       background: 'transparent',  // define the background color, you can also use `backgroundColor` here as key
@@ -90,7 +88,7 @@ export class NcovCli {
         if (format === SAMPLES) result |> decoSamples |> says['corona latest report']
       })
 
-    LF.repeat(10)|> logger
+    '' |> logger
   }
 }
 

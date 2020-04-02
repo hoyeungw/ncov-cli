@@ -1,7 +1,7 @@
 {
   "name": "ncov-cli",
-  "version": "0.0.9",
-  "description": "ncov latest update on cli",
+  "version": "0.1.0",
+  "description": "ncov latest update through cli",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "files": [
@@ -73,7 +73,9 @@
   },
   "keywords": [
     "ncov",
+    "ncov19",
     "corona",
+    "covonavirus",
     "covid",
     "cdc",
     "virus"

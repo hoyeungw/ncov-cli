@@ -253,7 +253,7 @@ class NcovCli {
       spn.succeed(Xr('updated')['scope'](scope)['timestamp'](now()).toString());
       if (format === TABLE) _ref2 = (_result = result, DecoTable({
         read: x => typeof x === NUM ? mag.format(x) : decoFlat(x)
-      })(_result)), says['corona latest report'](_ref2);
+      })(_result)), says['corona latest report'].br(scope)(_ref2);
       if (format === SAMPLES) _ref3 = (_result2 = result, decoSamples(_result2)), says['corona latest report'](_ref3);
     });
     _ref4 = '', logger(_ref4);

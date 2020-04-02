@@ -259,7 +259,7 @@ class NcovCli {
       spn.succeed(xr.Xr('updated')['scope'](scope)['timestamp'](timestamp.now()).toString());
       if (format === enumTabularTypes.TABLE) _ref2 = (_result = result, logger.DecoTable({
         read: x => typeof x === enumDataTypes.NUM ? mag.format(x) : decoFlat.decoFlat(x)
-      })(_result)), logger.says['corona latest report'](_ref2);
+      })(_result)), logger.says['corona latest report'].br(scope)(_ref2);
       if (format === enumTabularTypes.SAMPLES) _ref3 = (_result2 = result, logger.decoSamples(_result2)), logger.says['corona latest report'](_ref3);
     });
     _ref4 = '', logger.logger(_ref4);

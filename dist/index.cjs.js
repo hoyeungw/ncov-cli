@@ -10,11 +10,9 @@ var ora = _interopDefault(require('ora'));
 var cards = require('@palett/cards');
 var enumTabularTypes = require('@analys/enum-tabular-types');
 var logger = require('@spare/logger');
-var phrasing = require('@spare/phrasing');
 var vectorInit = require('@vect/vector-init');
 var fluoVector = require('@palett/fluo-vector');
 var vectorZipper = require('@vect/vector-zipper');
-var enumChars = require('@spare/enum-chars');
 var xr = require('@spare/xr');
 var timestamp = require('@valjoux/timestamp');
 var mag$1 = require('@cliche/mag');
@@ -223,9 +221,10 @@ class NcovCli {
       default: 'cases',
       message: 'By what field would you like to sort?',
       choices: fields.map(field => ({
-        name: phrasing.camelToSnake(field, enumChars.SP),
+        name: field,
         value: field
-      }))
+      })) // camelToSnake(field, SP)
+
     }, {
       name: 'top',
       type: LIST,

@@ -4,11 +4,9 @@ import ora from 'ora';
 import { Cards } from '@palett/cards';
 import { TABLE, SAMPLES } from '@analys/enum-tabular-types';
 import { logger, DecoTable, says, decoSamples } from '@spare/logger';
-import { camelToSnake } from '@spare/phrasing';
 import { range } from '@vect/vector-init';
 import { fluoVector } from '@palett/fluo-vector';
 import { zipper } from '@vect/vector-zipper';
-import { SP } from '@spare/enum-chars';
 import { Xr } from '@spare/xr';
 import { now } from '@valjoux/timestamp';
 import { Mag } from '@cliche/mag';
@@ -217,9 +215,10 @@ class NcovCli {
       default: 'cases',
       message: 'By what field would you like to sort?',
       choices: fields.map(field => ({
-        name: camelToSnake(field, SP),
+        name: field,
         value: field
-      }))
+      })) // camelToSnake(field, SP)
+
     }, {
       name: 'top',
       type: LIST,

@@ -1,9 +1,18 @@
 export const
-  DEATHRATE = 'deathRate',
+  STATE = 'state',
+  COUNTRY = 'country',
+  COUNTRY_INFO = 'countryInfo',
   CASES = 'cases',
   DEATHS = 'deaths',
-  COUNTRY_INFO = 'countryInfo',
-  CODE = 'code',
+  RECOVERED = 'recovered',
+  ACTIVE = 'active',
+  CRITICAL = 'critical',
+  CASES_TODAY = 'casesToday',
+  DEATHS_TODAY = 'deathsToday',
   UPDATED = 'updated',
-  CASESINML = 'cases/m*',
-  DEATHESINML = 'deaths/m*'
+  CASES_MILLION = 'cases/m*',
+  DEATHS_MILLION = 'deaths/m*'
+
+export const
+  CODE = 'code',
+  DEATH_RATE = 'death %'

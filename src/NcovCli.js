@@ -12,12 +12,12 @@ import { SP } from '@spare/enum-chars'
 import { Xr } from '@spare/xr'
 import { now } from '@valjoux/timestamp'
 import { Mag } from '@cliche/mag'
-import { iso } from '@vect/object-init'
-import { acquire } from '@vect/merge-acquire'
 import { NUM } from '@typen/enum-data-types'
 import { decoFlat } from '@spare/deco-flat'
 import { Ncov } from './Ncov'
-import { BASE_FIELDS, FIELDS, RATIO_FIELDS, TODAY_FIELDS } from '../resources/FIELDS'
+import { FIELDS_CHECKBOX_OPTIONS_GLOBAL } from '../resources/fieldsGlobal'
+import { FIELDS_CHECKBOX_OPTIONS_US } from '../resources/fieldsUs'
+import { scopeToBaseFields } from './utils/scopeToBaseFields'
 
 const LIST = 'list', CHECKBOX = 'checkbox', TODAY = 'today', RATIO = 'ratio'
 const RANGE200 = range(1, 200)
@@ -35,13 +35,30 @@ export class NcovCli {
     })
     '' |> logger
 
-    const { format, sortBy, top, fieldConfigs } = await inquirer.prompt([
+    const { scope } = await inquirer.prompt([{
+      name: 'scope',
+      type: LIST,
+      default: 0,
+      message: 'Do you want to check global or states in the US?',
+      choices: [
+        { name: 'global', value: 'latest' },
+        { name: 'the US', value: 'latestUS' }
+      ]
+    }])
+    const { fields } = await inquirer.prompt([{
+      name: 'fields',
+      type: CHECKBOX,
+      message: 'Please (multiple) select additional fields.',
+      choices: scope === 'latest' ? FIELDS_CHECKBOX_OPTIONS_GLOBAL : FIELDS_CHECKBOX_OPTIONS_US,
+      filter (answers) { return Array.prototype.concat.apply(scopeToBaseFields(scope), answers) }
+    }])
+    const { sortBy, top, format } = await inquirer.prompt([
       {
         name: 'sortBy',
         type: LIST,
         default: 'cases',
         message: 'By what field would you like to sort?',
-        choices: FIELDS.map(([curr, proj]) => ({ name: camelToSnake(curr, SP), value: proj }))
+        choices: fields.map(field => ({ name: camelToSnake(field, SP), value: field }))
       },
       {
         name: 'top',
@@ -53,32 +70,17 @@ export class NcovCli {
       {
         name: 'format',
         type: LIST,
-        default: 0,
+        default: TABLE,
         message: 'What format would you prefer?',
         choices: [
-          { name: 'Table', value: TABLE },
-          { name: 'Samples', value: SAMPLES }
+          { name: 'table', value: TABLE },
+          { name: 'samples', value: SAMPLES }
         ]
-      },
-      {
-        name: 'fieldConfigs',
-        type: CHECKBOX,
-        message: 'Please (multiple) select additional configs.',
-        choices: [
-          { name: 'Show today', checked: false, value: TODAY },
-          { name: 'Show ratios', checked: false, value: RATIO },
-        ],
-        filter (answers) { return iso(answers, true) }
       }
     ])
-    const makeFields = ({ today, ratio } = {}) => {
-      const fields = BASE_FIELDS
-      if (today) acquire(fields, TODAY_FIELDS)
-      if (ratio) acquire(fields, RATIO_FIELDS)
-      return fields
-    }
+
     const spn = ora(Xr('updating')['sortBy'](sortBy)['top'](top)['timestamp'](now()).toString()).start()
-    await Ncov.latest({ format, sortBy, top, fields: makeFields(fieldConfigs) })
+    await Ncov[scope]({ format, sortBy, top, fields })
       .then(result => {
         spn.succeed(Xr('updated')['timestamp'](now()).toString())
         if (format === TABLE) result

@@ -30,6 +30,7 @@
 - Latest update on all countries.
 - Sort by columns.
 - Highlight values based on rank. 
+- Interactive command-line interface(cli).
 
 #### Install
 ```console

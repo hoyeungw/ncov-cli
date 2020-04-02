@@ -1,4 +1,4 @@
-import { ACTIVE, CASES, CASES_TODAY, DEATH_RATE, DEATHS, DEATHS_TODAY, STATE } from './constants'
+import { ACTIVE, CASES, CASES_TODAY, DEATH_RATE, DEATHS, DEATHS_TODAY, STATE } from './constants.fields'
 
 export const BASE_FIELDS_US = [
   STATE,

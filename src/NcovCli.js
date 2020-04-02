@@ -18,6 +18,7 @@ import { Ncov } from './Ncov'
 import { FIELDS_CHECKBOX_OPTIONS_GLOBAL } from '../resources/fieldsGlobal'
 import { FIELDS_CHECKBOX_OPTIONS_US } from '../resources/fieldsUs'
 import { scopeToBaseFields } from './utils/scopeToBaseFields'
+import { GLOBAL, USA } from '../resources/constants.scope'
 
 const LIST = 'list', CHECKBOX = 'checkbox', TODAY = 'today', RATIO = 'ratio'
 const RANGE200 = range(1, 200)
@@ -41,8 +42,8 @@ export class NcovCli {
       default: 0,
       message: 'Do you want to check global or states in the US?',
       choices: [
-        { name: 'global', value: 'latest' },
-        { name: 'the US', value: 'latestUS' }
+        { name: 'global', value: GLOBAL },
+        { name: 'the United States', value: USA }
       ]
     }])
     const { fields } = await inquirer.prompt([{
@@ -64,14 +65,14 @@ export class NcovCli {
         name: 'top',
         type: LIST,
         default: 29,
-        message: 'How about narrow down to only top countries?',
+        message: 'Narrow down to only top countries?',
         choices: zipper(COLORED_RANGE200, RANGE200, (name, value) => ({ name, value }))
       },
       {
         name: 'format',
         type: LIST,
         default: TABLE,
-        message: 'What format would you prefer?',
+        message: 'What tabular format do you prefer?',
         choices: [
           { name: 'table', value: TABLE },
           { name: 'samples', value: SAMPLES }
@@ -82,7 +83,7 @@ export class NcovCli {
     const spn = ora(Xr('updating')['sortBy'](sortBy)['top'](top)['timestamp'](now()).toString()).start()
     await Ncov[scope]({ format, sortBy, top, fields })
       .then(result => {
-        spn.succeed(Xr('updated')['timestamp'](now()).toString())
+        spn.succeed(Xr('updated')['scope'](scope)['timestamp'](now()).toString())
         if (format === TABLE) result
           |> DecoTable({ read: x => typeof x === NUM ? mag.format(x) : decoFlat(x) })
           |> says['corona latest report']

@@ -12,7 +12,7 @@ import {
   DEATHS_TODAY,
   RECOVERED,
   UPDATED
-} from './constants'
+} from './constants.fields'
 
 export const BASE_FIELDS_GLOBAL = [
   CODE,

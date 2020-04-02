@@ -24,7 +24,7 @@
 [url-pp]: https://packagephobia.now.sh/result?p=ncov-cli
 [url-github]: https://github.com/hoyeungw/ncov-cli
 
-##### Cli for ncov update
+##### Get ncov latest update via interactive cli
 
 #### Features
 - Latest update on all countries.

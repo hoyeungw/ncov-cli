@@ -1,4 +1,4 @@
-import { CASES, CODE, COUNTRY_INFO, DEATH_RATE, DEATHS, DEATHS_MILLION, UPDATED } from '../../resources/constants'
+import { CASES, CODE, COUNTRY_INFO, DEATH_RATE, DEATHS, DEATHS_MILLION, UPDATED } from '../../resources/constants.fields'
 import { Table } from '@analys/table'
 import { samplesToTable } from '@analys/convert'
 import { NUM_DESC } from '@aryth/comparer'

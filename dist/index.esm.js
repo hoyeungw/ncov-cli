@@ -73,7 +73,7 @@ const FIELDS_GLOBAL = [['updated', UPDATED], ['country', COUNTRY], ['countryInfo
 const FIELDS_US = [['state', STATE], ['cases', CASES], ['deaths', DEATHS], ['active', ACTIVE], ['todayCases', CASES_TODAY], ['todayDeaths', DEATHS_TODAY]];
 
 class Ncov {
-  static async latest({
+  static async global({
     format = TABLE,
     sortBy = 'cases',
     top = 15,
@@ -94,7 +94,7 @@ class Ncov {
     });
   }
 
-  static async latestUS({
+  static async usa({
     format = TABLE,
     sortBy = 'cases',
     top = 15,
@@ -148,9 +148,12 @@ const FIELDS_CHECKBOX_OPTIONS_US = [{
   value: TODAY_FIELDS_US
 }];
 
+const GLOBAL = 'global',
+      USA = 'usa';
+
 const scopeToBaseFields = scope => {
-  if (scope === 'latest') return BASE_FIELDS_GLOBAL;
-  if (scope === 'latestUS') return BASE_FIELDS_US;
+  if (scope === GLOBAL) return BASE_FIELDS_GLOBAL;
+  if (scope === USA) return BASE_FIELDS_US;
   return [];
 };
 
@@ -185,10 +188,10 @@ class NcovCli {
       message: 'Do you want to check global or states in the US?',
       choices: [{
         name: 'global',
-        value: 'latest'
+        value: GLOBAL
       }, {
-        name: 'the US',
-        value: 'latestUS'
+        name: 'the United States',
+        value: USA
       }]
     }]);
     const {
@@ -221,7 +224,7 @@ class NcovCli {
       name: 'top',
       type: LIST,
       default: 29,
-      message: 'How about narrow down to only top countries?',
+      message: 'Narrow down to only top countries?',
       choices: zipper(COLORED_RANGE200, RANGE200, (name, value) => ({
         name,
         value
@@ -230,7 +233,7 @@ class NcovCli {
       name: 'format',
       type: LIST,
       default: TABLE,
-      message: 'What format would you prefer?',
+      message: 'What tabular format do you prefer?',
       choices: [{
         name: 'table',
         value: TABLE
@@ -248,7 +251,7 @@ class NcovCli {
     }).then(result => {
       var _ref2, _result, _ref3, _result2;
 
-      spn.succeed(Xr('updated')['timestamp'](now()).toString());
+      spn.succeed(Xr('updated')['scope'](scope)['timestamp'](now()).toString());
       if (format === TABLE) _ref2 = (_result = result, DecoTable({
         read: x => typeof x === NUM ? mag.format(x) : decoFlat(x)
       })(_result)), says['corona latest report'](_ref2);

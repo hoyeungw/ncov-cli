@@ -16,3 +16,4 @@ export const
 export const
   CODE = 'code',
   DEATH_RATE = 'death %'
+

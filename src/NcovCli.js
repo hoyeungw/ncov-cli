@@ -84,7 +84,7 @@ export class NcovCli {
         spn.succeed(Xr('updated')['scope'](scope)['timestamp'](now()).toString())
         if (format === TABLE) result
           |> DecoTable({ read: x => typeof x === NUM ? mag.format(x) : decoFlat(x) })
-          |> says['corona latest report']
+          |> says['corona latest report'].br(scope)
         if (format === SAMPLES) result |> decoSamples |> says['corona latest report']
       })
 

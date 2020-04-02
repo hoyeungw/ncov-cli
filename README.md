@@ -27,14 +27,20 @@
 ##### Cli for ncov update
 
 #### Features
+- Latest update on all countries.
+- Sort by columns.
+- Highlight values based on rank. 
 
 #### Install
 ```console
-$ npm install ncov-cli
+# Install globally
+$ npm install -g ncov-cli
 ```
 
 #### Usage
-```js
+```console
+$ ncov
+# Then follow instructions to see daily statistics.
 ```
 
 #### Meta

@@ -1,6 +1,6 @@
 {
   "name": "ncov-cli",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "get ncov latest update via interactive cli",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",

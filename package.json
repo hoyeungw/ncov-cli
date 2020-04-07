@@ -1,6 +1,6 @@
 {
   "name": "ncov-cli",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "get ncov latest update via interactive cli",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
@@ -20,10 +20,10 @@
   "dependencies": {
     "@acq/acq": "^0.2.0",
     "@analys/convert": "^0.0.14",
+    "@analys/crostab": "^0.1.8",
     "@analys/enum-mutabilities": "^0.1.8",
     "@analys/enum-pivot-mode": "latest",
     "@analys/enum-tabular-types": "^0.1.8",
-    "@analys/crostab": "^0.1.8",
     "@analys/table": "^0.1.8",
     "@analys/table-join": "^0.1.8",
     "@aryth/comparer": "^0.1.0",
@@ -37,10 +37,10 @@
     "@typen/enum-data-types": "^0.0.7",
     "@typen/num-strict": "^0.0.7",
     "@valjoux/timestamp": "^0.0.5",
-    "@vect/vector-init": "^0.2.0",
-    "@vect/vector-zipper": "^0.2.0",
     "@vect/entries-init": "^0.2.0",
+    "@vect/vector-init": "^0.2.0",
     "@vect/vector-mapper": "^0.2.0",
+    "@vect/vector-zipper": "^0.2.0",
     "cfonts": "^2.8.1",
     "inquirer": "^7.1.0",
     "ora": "^4.0.3"

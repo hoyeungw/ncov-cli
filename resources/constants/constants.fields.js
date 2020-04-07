@@ -14,6 +14,6 @@ export const
   DEATHS_MILLION = 'deaths/m*'
 
 export const
-  CODE = 'code',
+  ID = 'id',
   DEATH_RATE = 'death %'
 

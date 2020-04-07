@@ -3,7 +3,7 @@ import inquirer from 'inquirer'
 import ora from 'ora'
 import { Cards } from '@palett/cards'
 import { SAMPLES, TABLE } from '@analys/enum-tabular-types'
-import { decoSamples, DecoTable, logger, says } from '@spare/logger'
+import { decoSamples, decoTable, DecoTable, logger, says } from '@spare/logger'
 import { range } from '@vect/vector-init'
 import { fluoVector } from '@palett/fluo-vector'
 import { zipper } from '@vect/vector-zipper'
@@ -13,10 +13,12 @@ import { Mag } from '@cliche/mag'
 import { NUM } from '@typen/enum-data-types'
 import { decoFlat } from '@spare/deco-flat'
 import { Ncov } from './Ncov'
-import { FIELDS_CHECKBOX_OPTIONS_GLOBAL } from '../resources/fieldsGlobal'
-import { FIELDS_CHECKBOX_OPTIONS_US } from '../resources/fieldsUs'
+import { FIELDS_CHECKBOX_OPTIONS_GLOBAL } from '../resources/constants/fieldsGlobal'
+import { FIELDS_CHECKBOX_OPTIONS_US } from '../resources/constants/fieldsUs'
 import { scopeToBaseFields } from './utils/scopeToBaseFields'
-import { GLOBAL, USA } from '../resources/constants.scope'
+import { GLOBAL, STAT, USA } from '../resources/constants/constants.scope'
+import { incomeLevelsStat, regionsStat } from './derivatives'
+import { INCOMELEVEL, REGION } from '../resources/constants/rawOuterFields'
 
 const LIST = 'list', CHECKBOX = 'checkbox', TODAY = 'today', RATIO = 'ratio'
 const RANGE200 = range(1, 200)
@@ -38,17 +40,29 @@ export class NcovCli {
       name: 'scope',
       type: LIST,
       default: 0,
-      message: 'Do you want to check global or states in the US?',
+      message: 'Do you want to check global, states in the US, or general statistics?',
       choices: [
         { name: 'global', value: GLOBAL },
-        { name: 'the United States', value: USA }
+        { name: 'the United States', value: USA },
+        { name: 'general statistics', value: STAT },
       ]
     }])
+    if (scope === STAT) {
+      const spn = ora(Xr('updating')['timestamp'](now()).toString()).start()
+      const table = await Ncov.global({ top: 0 })
+      spn.succeed(Xr('updated')['scope'](scope)['timestamp'](now()).toString())
+      '' |> logger
+      await regionsStat(table) |> decoTable |> says[REGION]
+      '' |> logger
+      await incomeLevelsStat(table) |> decoTable |> says[INCOMELEVEL]
+      '' |> logger
+      return void 0
+    }
     const { fields } = await inquirer.prompt([{
       name: 'fields',
       type: CHECKBOX,
       message: 'Please (multiple) select additional fields.',
-      choices: scope === 'latest' ? FIELDS_CHECKBOX_OPTIONS_GLOBAL : FIELDS_CHECKBOX_OPTIONS_US,
+      choices: scope === GLOBAL ? FIELDS_CHECKBOX_OPTIONS_GLOBAL : FIELDS_CHECKBOX_OPTIONS_US,
       filter (answers) { return Array.prototype.concat.apply(scopeToBaseFields(scope), answers) }
     }])
     const { sortBy, top, format } = await inquirer.prompt([

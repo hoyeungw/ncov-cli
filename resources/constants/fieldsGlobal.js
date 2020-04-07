@@ -3,7 +3,7 @@ import {
   CASES,
   CASES_MILLION,
   CASES_TODAY,
-  CODE,
+  ID,
   COUNTRY,
   CRITICAL,
   DEATH_RATE,
@@ -15,7 +15,7 @@ import {
 } from './constants.fields'
 
 export const BASE_FIELDS_GLOBAL = [
-  CODE,
+  ID,
   UPDATED,
   COUNTRY,
   CASES,

@@ -1,3 +1,4 @@
 export const
   GLOBAL = 'global',
-  USA = 'usa'
+  USA = 'usa',
+  STAT = 'stat'

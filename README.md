@@ -33,6 +33,7 @@
 - Sort by columns.
 - Highlight values based on rank. 
 - Interactive command-line interface(cli).
+- General statistics by country groups, e.g. geographic regions, income levels.
 - Data source : [NovelCOVID API](https://github.com/NovelCOVID/API/)
 
 #### Install

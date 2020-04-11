@@ -1,5 +1,7 @@
 export const
   T_COUNT = 'count',
+  ADMINREGION = 'adminregion',
   POPULATION = 'population',
   REGION = 'region',
-  INCOMELEVEL = 'incomeLevel'
+  INCOMELEVEL = 'incomeLevel',
+  LENDTYPE = 'lendingType'

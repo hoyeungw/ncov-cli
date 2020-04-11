@@ -1,21 +1,18 @@
-import { LEFT, tableJoin } from '@analys/table-join'
-import { Table } from '@analys/table'
-import { COUNT, INCRE } from '@analys/enum-pivot-mode'
-import { isNumeric } from '@typen/num-strict'
-import { mutate } from '@vect/vector-mapper'
-import { iso } from '@vect/vector-init'
-import { adjoin } from '@spare/phrasing'
-import { wind } from '@vect/entries-init'
-import { NUM_DESC } from '@aryth/comparer'
-import { CrosTab } from '@analys/crostab'
-import { countries } from '../resources/data/countries'
-import { populations } from '../resources/data/populations'
-import { CASES, CASES_MILLION, DEATH_RATE, DEATHS, DEATHS_MILLION, ID } from '../resources/constants/constants.fields'
-import { INCOMELEVEL, REGION } from '../resources/constants/rawOuterFields'
-import { Regions } from '../resources/data/Regions'
-import { IncomeLevels } from '../resources/data/IncomeLevels'
-
-const refTable = tableJoin(countries, populations, [ID], LEFT)
+import { CrosTab }                                                      from '@analys/crostab'
+import { COUNT, INCRE }                                                 from '@analys/enum-pivot-mode'
+import { Table }                                                        from '@analys/table'
+import { LEFT, tableJoin }                                              from '@analys/table-join'
+import { NUM_DESC }                                                     from '@aryth/comparer'
+import { adjoin }                                                       from '@spare/phrasing'
+import { isNumeric }                                                    from '@typen/num-strict'
+import { wind }                                                         from '@vect/entries-init'
+import { iso }                                                          from '@vect/vector-init'
+import { mutate }                                                       from '@vect/vector-mapper'
+import { CASES, CASES_MILLION, DEATH_RATE, DEATHS, DEATHS_MILLION, ID } from '../../resources/constants/constants.fields'
+import { INCOMELEVEL, REGION }                                          from '../../resources/constants/rawOuterFields'
+import { IncomeLevels }                                                 from '../../resources/data/IncomeLevels'
+import { Regions }                                                      from '../../resources/data/Regions'
+import { c12ns }                                                        from '../utils/c12ns'
 
 const Filters = {
   get numeric () { return { population: isNumeric, cases: isNumeric } }
@@ -57,7 +54,7 @@ const Fields = {
 
 export const regionByIncomeLevelCrosTab = async (dataTable) => {
   // const dataTable = await Ncov.global({ top: 0 })
-  const table = tableJoin(dataTable, refTable, [ID], LEFT) |> Table.from
+  const table = tableJoin(dataTable, c12ns, [ID], LEFT) |> Table.from
   const crostab = table.crosTab({
     side: REGION,
     banner: INCOMELEVEL,
@@ -72,7 +69,7 @@ export const regionByIncomeLevelCrosTab = async (dataTable) => {
 
 export const regionsStat = async (dataTable) => {
   // const dataTable = await Ncov.global({ top: 0 })
-  const table = tableJoin(dataTable, refTable, [ID], LEFT) |> Table.from
+  const table = tableJoin(dataTable, c12ns, [ID], LEFT) |> Table.from
   let t = chipStat(table, { ...Fields.regionSet, ...Formulas.count })
   t = tableJoin(t, chipStat(table, { ...Fields.regionSet, ...Formulas.cases }), [REGION], LEFT)
   t = tableJoin(t, chipStat(table, { ...Fields.regionSet, ...Formulas.deaths }), [REGION], LEFT)
@@ -85,7 +82,7 @@ export const regionsStat = async (dataTable) => {
 
 export const incomeLevelsStat = async (dataTable) => {
   // const dataTable = await Ncov.global({ top: 0 })
-  const table = tableJoin(dataTable, refTable, [ID], LEFT) |> Table.from
+  const table = tableJoin(dataTable, c12ns, [ID], LEFT) |> Table.from
   let t = chipStat(table, { ...Fields.incomeLevelSet, ...Formulas.count })
   t = tableJoin(t, chipStat(table, { ...Fields.incomeLevelSet, ...Formulas.cases }), [INCOMELEVEL], LEFT)
   t = tableJoin(t, chipStat(table, { ...Fields.incomeLevelSet, ...Formulas.deaths }), [INCOMELEVEL], LEFT)

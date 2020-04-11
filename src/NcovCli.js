@@ -1,24 +1,45 @@
-import CFonts from 'cfonts'
-import inquirer from 'inquirer'
-import ora from 'ora'
-import { Cards } from '@palett/cards'
-import { SAMPLES, TABLE } from '@analys/enum-tabular-types'
+import { SAMPLES, TABLE }                                  from '@analys/enum-tabular-types'
+import { Mag }                                             from '@cliche/mag'
+import { Cards }                                           from '@palett/cards'
+import { fluoVector }                                      from '@palett/fluo-vector'
+import { decoFlat }                                        from '@spare/deco-flat'
 import { decoSamples, decoTable, DecoTable, logger, says } from '@spare/logger'
-import { range } from '@vect/vector-init'
-import { fluoVector } from '@palett/fluo-vector'
-import { zipper } from '@vect/vector-zipper'
-import { Xr } from '@spare/xr'
-import { now } from '@valjoux/timestamp'
-import { Mag } from '@cliche/mag'
-import { NUM } from '@typen/enum-data-types'
-import { decoFlat } from '@spare/deco-flat'
-import { Ncov } from './Ncov'
-import { FIELDS_CHECKBOX_OPTIONS_GLOBAL } from '../resources/constants/fieldsGlobal'
-import { FIELDS_CHECKBOX_OPTIONS_US } from '../resources/constants/fieldsUs'
-import { scopeToBaseFields } from './utils/scopeToBaseFields'
-import { GLOBAL, STAT, USA } from '../resources/constants/constants.scope'
-import { incomeLevelsStat, regionsStat } from './derivatives'
-import { INCOMELEVEL, REGION } from '../resources/constants/rawOuterFields'
+import { Xr }                                              from '@spare/xr'
+import { NUM }                                             from '@typen/enum-data-types'
+import { now }                                             from '@valjoux/timestamp'
+import { range }                                           from '@vect/vector-init'
+import { zipper }                                          from '@vect/vector-zipper'
+import CFonts                                              from 'cfonts'
+import inquirer                                            from 'inquirer'
+import ora                                                 from 'ora'
+import {
+  CASES,
+  CASES_MILLION,
+  COUNTRY,
+  DEATH_RATE,
+  DEATHS,
+  DEATHS_MILLION
+}                                                          from '../resources/constants/constants.fields'
+import {
+  GLOBAL,
+  STAT,
+  USA
+}                                                          from '../resources/constants/constants.scope'
+import {
+  DETAIL_FIELDS_GLOBAL,
+  FIELDS_CHECKBOX_OPTIONS_GLOBAL,
+  TODAY_FIELDS_GLOBAL
+}                                                          from '../resources/constants/fieldsGlobal'
+import { FIELDS_CHECKBOX_OPTIONS_US }                      from '../resources/constants/fieldsUs'
+import {
+  ADMINREGION,
+  INCOMELEVEL,
+  POPULATION,
+  REGION
+}                                                          from '../resources/constants/rawOuterFields'
+import { groupedStat }                                     from './groupedStat/groupedStat'
+import { Ncov }                                            from './Ncov'
+import { scopeToBaseFields }                               from './utils/scopeToBaseFields'
 
 const LIST = 'list', CHECKBOX = 'checkbox', TODAY = 'today', RATIO = 'ratio'
 const RANGE200 = range(1, 200)
@@ -51,10 +72,29 @@ export class NcovCli {
       const spn = ora(Xr('updating')['timestamp'](now()).toString()).start()
       const table = await Ncov.global({ top: 0 })
       spn.succeed(Xr('updated')['scope'](scope)['timestamp'](now()).toString())
+      const { fields } = await inquirer.prompt([{
+        name: 'fields',
+        type: CHECKBOX,
+        message: 'Please (multiple) select additional fields.',
+        choices: [
+          { name: 'show today', checked: false, value: TODAY_FIELDS_GLOBAL },
+          { name: 'show details', checked: false, value: DETAIL_FIELDS_GLOBAL },
+        ],
+        filter (answers) { return [].concat(...answers) }
+      }])
+      const { sortBy } = await inquirer.prompt([{
+        name: 'sortBy',
+        type: LIST,
+        default: 'cases',
+        message: 'By what field would you like to sort?',
+        choices: [COUNTRY, CASES, DEATHS, POPULATION, CASES_MILLION, DEATHS_MILLION, DEATH_RATE].concat(fields)
+      }])
       '' |> logger
-      await regionsStat(table) |> decoTable |> says[REGION]
+      await groupedStat(table, { groupBy: REGION, sortBy, restFields: fields }) |> decoTable |> says[REGION]
       '' |> logger
-      await incomeLevelsStat(table) |> decoTable |> says[INCOMELEVEL]
+      await groupedStat(table, { groupBy: INCOMELEVEL, sortBy, restFields: fields }) |> decoTable |> says[INCOMELEVEL]
+      '' |> logger
+      await groupedStat(table, { groupBy: ADMINREGION, sortBy, restFields: fields }) |> decoTable |> says[ADMINREGION]
       '' |> logger
       return void 0
     }
@@ -63,7 +103,7 @@ export class NcovCli {
       type: CHECKBOX,
       message: 'Please (multiple) select additional fields.',
       choices: scope === GLOBAL ? FIELDS_CHECKBOX_OPTIONS_GLOBAL : FIELDS_CHECKBOX_OPTIONS_US,
-      filter (answers) { return Array.prototype.concat.apply(scopeToBaseFields(scope), answers) }
+      filter (answers) { return scopeToBaseFields(scope).concat(...answers) }
     }])
     const { sortBy, top, format } = await inquirer.prompt([
       {

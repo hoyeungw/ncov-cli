@@ -193,10 +193,7 @@ const groupedStat = async (table$1, {
       population: enumPivotMode.INCRE
     }, objectInit.iso(restFields, enumPivotMode.INCRE)),
     filter: objectInit.pair(groupBy, x => !!x)
-  }).formula({
-    fields: [CASES, DEATHS, POPULATION],
-    formulas: objectInit.init([[CASES_MILLION, (cases, deaths, population) => (cases / population * 1E+6).toFixed(2)], [DEATHS_MILLION, (cases, deaths, population) => (deaths / population * 1E+6).toFixed(2)], [DEATH_RATE, (cases, deaths, population) => (deaths / cases * 100).toFixed(2)]])
-  });
+  }).formula(objectInit.init([[CASES_MILLION, (cases, population) => (cases / population * 1E+6).toFixed(2)], [DEATHS_MILLION, (deaths, population) => (deaths / population * 1E+6).toFixed(2)], [DEATH_RATE, (cases, deaths) => (deaths / cases * 100).toFixed(2)]]));
   if (groupBy in GroupLabels) table$1.mutateColumn(groupBy, x => GroupLabels[groupBy][x]);
   if (sortBy) table$1.sort(sortBy, comparer.NUM_DESC);
   return table$1;

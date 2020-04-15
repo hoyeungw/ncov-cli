@@ -1,22 +1,15 @@
-import { COUNT, INCRE }                                           from '@analys/enum-pivot-mode'
-import { Table }                                                  from '@analys/table'
-import { LEFT, tableJoin }                                        from '@analys/table-join'
-import { NUM_DESC }                                               from '@aryth/comparer'
-import { init, iso, pair }                                        from '@vect/object-init'
-import {
-  CASES,
-  CASES_MILLION,
-  DEATH_RATE,
-  DEATHS,
-  DEATHS_MILLION,
-  ID
-}                                                                 from '../../resources/constants/constants.fields'
-import { ADMINREGION, INCOMELEVEL, LENDTYPE, POPULATION, REGION } from '../../resources/constants/rawOuterFields'
-import { AdminRegions }                                           from '../../resources/data/AdminRegions'
-import { IncomeLevels }                                           from '../../resources/data/IncomeLevels'
-import { LendingTypes }                                           from '../../resources/data/LendingTypes'
-import { Regions }                                                from '../../resources/data/Regions'
-import { c12ns }                                                  from '../utils/c12ns'
+import { COUNT, INCRE }                                         from '@analys/enum-pivot-mode'
+import { Table }                                                from '@analys/table'
+import { LEFT, tableJoin }                                      from '@analys/table-join'
+import { NUM_DESC }                                             from '@aryth/comparer'
+import { init, iso, pair }                                      from '@vect/object-init'
+import { CASES, CASES_MILLION, DEATH_RATE, DEATHS_MILLION, ID } from '../../resources/constants/constants.fields'
+import { ADMINREGION, INCOMELEVEL, LENDTYPE, REGION }           from '../../resources/constants/rawOuterFields'
+import { AdminRegions }                                         from '../../resources/data/AdminRegions'
+import { IncomeLevels }                                         from '../../resources/data/IncomeLevels'
+import { LendingTypes }                                         from '../../resources/data/LendingTypes'
+import { Regions }                                              from '../../resources/data/Regions'
+import { c12ns }                                                from '../utils/c12ns'
 
 const GroupLabels = init([
   [REGION, Regions],
@@ -39,14 +32,12 @@ export const groupedStat = async (table, { groupBy = REGION, sortBy = CASES, res
       },
       filter: pair(groupBy, x => !!x)
     })
-    .formula({
-      fields: [CASES, DEATHS, POPULATION],
-      formulas: init([
-        [CASES_MILLION, (cases, deaths, population) => (cases / population * 1E+6).toFixed(2)],
-        [DEATHS_MILLION, (cases, deaths, population) => (deaths / population * 1E+6).toFixed(2)],
-        [DEATH_RATE, (cases, deaths, population) => (deaths / cases * 100).toFixed(2)],
+    .formula(init([
+        [CASES_MILLION, (cases, population) => (cases / population * 1E+6).toFixed(2)],
+        [DEATHS_MILLION, (deaths, population) => (deaths / population * 1E+6).toFixed(2)],
+        [DEATH_RATE, (cases, deaths) => (deaths / cases * 100).toFixed(2)],
       ])
-    })
+    )
   if (groupBy in GroupLabels) table.mutateColumn(groupBy, x => GroupLabels[groupBy][x])
   if (sortBy) table.sort(sortBy, NUM_DESC)
   return table

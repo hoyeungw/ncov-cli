@@ -4,7 +4,7 @@ import { BASE_FIELDS_GLOBAL } from '../resources/constants/fieldsGlobal'
 
 const test = async () => {
   await Ncov
-    .latestUS({ fields: BASE_FIELDS_GLOBAL })
+    .usa({ fields: BASE_FIELDS_GLOBAL })
     .then(table => {
       table |> decoTable |> logger
     })

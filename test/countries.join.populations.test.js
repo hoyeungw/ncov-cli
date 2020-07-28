@@ -1,8 +1,9 @@
-import { countries } from '../resources/data/countries'
-import { populations } from '../resources/data/populations'
-import { LEFT, tableJoin } from '@analys/table-join'
-import { decoSamples, decoTable, delogger, logger } from '@spare/logger'
-import { tableToSamples } from '@analys/convert'
+import { tableToSamples }      from '@analys/convert'
+import { LEFT }                from '@analys/enum-join-modes'
+import { tableJoin }           from '@analys/table-join'
+import { decoSamples, logger } from '@spare/logger'
+import { countries }           from '../resources/data/countries'
+import { populations }         from '../resources/data/populations'
 
 /** @typedef {number|string} str */
 

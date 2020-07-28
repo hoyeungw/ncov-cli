@@ -1,6 +1,6 @@
 {
   "name": "ncov-cli",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "latest update of the coronavirus(ncov) data through interactive cli",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",

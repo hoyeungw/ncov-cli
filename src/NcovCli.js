@@ -132,16 +132,17 @@ export class NcovCli {
       }
     ])
 
-    const spn = ora(Xr('updating')['sortBy'](sortBy)['top'](top)['timestamp'](time()).toString()).start()
+    const spn = ora(Xr('updating').sortBy(sortBy).top(top).timestamp(time()).toString()).start()
     await Ncov[scope]({ format, sortBy, top, fields })
       .then(result => {
-        spn.succeed(Xr('updated')['scope'](scope)['timestamp'](time()).toString())
+        spn.succeed(Xr('updated').scope(scope).timestamp(time()).toString())
         if (format === TABLE) result
           |> DecoTable({ read: x => typeof x === NUM ? mag.format(x) : decoFlat(x) })
           |> says['corona latest report'].br(scope)
-        if (format === SAMPLES) result |> decoSamples |> says['corona latest report']
+        if (format === SAMPLES) result
+          |> decoSamples
+          |> says['corona latest report'].br(scope)
       })
-
     '' |> logger
   }
 }

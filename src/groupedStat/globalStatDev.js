@@ -1,28 +1,36 @@
-import { CrosTab }                                                      from '@analys/crostab'
-import { COUNT, INCRE }                                                 from '@analys/enum-pivot-mode'
-import { Table }                                                        from '@analys/table'
-import { LEFT, tableJoin }                                              from '@analys/table-join'
-import { NUM_DESC }                                                     from '@aryth/comparer'
-import { adjoin }                                                       from '@spare/phrasing'
-import { isNumeric }                                                    from '@typen/num-strict'
-import { wind }                                                         from '@vect/entries-init'
-import { iso }                                                          from '@vect/vector-init'
-import { mutate }                                                       from '@vect/vector-mapper'
-import { CASES, CASES_MILLION, DEATH_RATE, DEATHS, DEATHS_MILLION, ID } from '../../resources/constants/constants.fields'
-import { INCOMELEVEL, REGION }                                          from '../../resources/constants/rawOuterFields'
-import { IncomeLevels }                                                 from '../../resources/data/IncomeLevels'
-import { Regions }                                                      from '../../resources/data/Regions'
-import { c12ns }                                                        from '../utils/c12ns'
+import { CrosTab }             from '@analys/crostab'
+import { LEFT }                from '@analys/enum-join-modes'
+import { COUNT, INCRE }        from '@analys/enum-pivot-mode'
+import { Table }               from '@analys/table'
+import { tableJoin }           from '@analys/table-join'
+import { NUM_DESC }            from '@aryth/comparer'
+import { adjoin }              from '@spare/tap'
+import { isNumeric }           from '@typen/num-strict'
+import { wind }                from '@vect/entries-init'
+import { iso }                 from '@vect/vector-init'
+import { mutate }              from '@vect/vector-mapper'
+import {
+  CASES,
+  CASES_MILLION,
+  DEATH_RATE,
+  DEATHS,
+  DEATHS_MILLION,
+  ID
+}                              from '../../resources/constants/constants.fields'
+import { INCOMELEVEL, REGION } from '../../resources/constants/rawOuterFields'
+import { IncomeLevels }        from '../../resources/data/IncomeLevels'
+import { Regions }             from '../../resources/data/Regions'
+import { c12ns }               from '../utils/c12ns'
 
 const Filters = {
-  get numeric () { return { population: isNumeric, cases: isNumeric } }
+  get numeric() { return { population: isNumeric, cases: isNumeric } }
 }
 const Formulas = {
-  get count () {return { field: { country: COUNT }, filter: Filters.numeric, indicator: 'count' }},
-  get cases () {return { field: { cases: INCRE }, filter: Filters.numeric, indicator: CASES }},
-  get deaths () {return { field: { deaths: INCRE }, filter: Filters.numeric, indicator: DEATHS }},
-  get population () {return { field: { population: INCRE }, filter: Filters.numeric, indicator: 'population' }},
-  get casesInMillion () {
+  get count() {return { field: { country: COUNT }, filter: Filters.numeric, indicator: 'count' }},
+  get cases() {return { field: { cases: INCRE }, filter: Filters.numeric, indicator: CASES }},
+  get deaths() {return { field: { deaths: INCRE }, filter: Filters.numeric, indicator: DEATHS }},
+  get population() {return { field: { population: INCRE }, filter: Filters.numeric, indicator: 'population' }},
+  get casesInMillion() {
     return {
       field: { cases: INCRE, population: INCRE },
       filter: Filters.numeric,
@@ -30,7 +38,7 @@ const Formulas = {
       indicator: CASES_MILLION
     }
   },
-  get deathsInMillion () {
+  get deathsInMillion() {
     return {
       field: { deaths: INCRE, population: INCRE },
       filter: Filters.numeric,
@@ -38,7 +46,7 @@ const Formulas = {
       indicator: DEATHS_MILLION
     }
   },
-  get deathRate () {
+  get deathRate() {
     return {
       field: { deaths: INCRE, cases: INCRE },
       filter: Filters.numeric,
@@ -48,8 +56,8 @@ const Formulas = {
   },
 }
 const Fields = {
-  get regionSet () { return { side: REGION, sideFields: Regions } },
-  get incomeLevelSet () { return { side: INCOMELEVEL, sideFields: IncomeLevels } }
+  get regionSet() { return { side: REGION, sideFields: Regions } },
+  get incomeLevelSet() { return { side: INCOMELEVEL, sideFields: IncomeLevels } }
 }
 
 export const regionByIncomeLevelCrosTab = async (dataTable) => {
@@ -106,5 +114,7 @@ const chipStat = (table, { side, field, filter, formula, sideFields, indicator }
   const title = adjoin(indicator, 'by', side)
   const head = [side, indicator]
   const rows = wind(crostab.side, crostab.rows.map(([v]) => v))
-  return Table.from({ head, rows, title }).sort(indicator, NUM_DESC)
+  return Table
+    .from({ head, rows, title })
+    .sort(indicator, NUM_DESC)
 }

@@ -6,16 +6,16 @@ import { decoFlat } from '@spare/deco-flat';
 import { logger, decoTable, says, DecoTable, decoSamples } from '@spare/logger';
 import { Xr } from '@spare/xr';
 import { NUM } from '@typen/enum-data-types';
-import { now } from '@valjoux/timestamp';
+import { time } from '@valjoux/timestamp-pretty';
 import { range } from '@vect/vector-init';
 import { zipper } from '@vect/vector-zipper';
 import CFonts from 'cfonts';
 import inquirer from 'inquirer';
 import ora from 'ora';
-import { LEFT as LEFT$1 } from '@analys/enum-join-modes';
+import { LEFT } from '@analys/enum-join-modes';
 import { INCRE, COUNT } from '@analys/enum-pivot-mode';
 import { Table } from '@analys/table';
-import { tableJoin, LEFT } from '@analys/table-join';
+import { tableJoin } from '@analys/table-join';
 import { NUM_DESC } from '@aryth/comparer';
 import { init, iso, pair } from '@vect/object-init';
 import { Acq } from '@acq/acq';
@@ -179,7 +179,7 @@ const groupedStat = async (table, {
   sortBy = CASES,
   restFields = []
 } = {}) => {
-  table = Table.from(tableJoin(table, c12ns, [ID], LEFT$1)).group({
+  table = Table.from(tableJoin(table, c12ns, [ID], LEFT)).group({
     key: groupBy,
     field: _objectSpread2({
       country: COUNT,
@@ -325,11 +325,11 @@ class NcovCli {
     if (scope === STAT) {
       var _ref2, _ref3, _await$groupedStat, _ref4, _ref5, _await$groupedStat2, _ref6, _ref7, _await$groupedStat3, _ref8;
 
-      const spn = ora(Xr('updating')['timestamp'](now()).toString()).start();
+      const spn = ora(Xr('updating').timestamp(time()).toString()).start();
       const table = await Ncov.global({
         top: 0
       });
-      spn.succeed(Xr('updated')['scope'](scope)['timestamp'](now()).toString());
+      spn.succeed(Xr('updated').scope(scope).timestamp(time()).toString());
       const {
         fields
       } = await inquirer.prompt([{
@@ -431,7 +431,7 @@ class NcovCli {
         value: SAMPLES
       }]
     }]);
-    const spn = ora(Xr('updating')['sortBy'](sortBy)['top'](top)['timestamp'](now()).toString()).start();
+    const spn = ora(Xr('updating').sortBy(sortBy).top(top).timestamp(time()).toString()).start();
     await Ncov[scope]({
       format,
       sortBy,
@@ -440,11 +440,11 @@ class NcovCli {
     }).then(result => {
       var _ref9, _result, _ref10, _result2;
 
-      spn.succeed(Xr('updated')['scope'](scope)['timestamp'](now()).toString());
+      spn.succeed(Xr('updated').scope(scope).timestamp(time()).toString());
       if (format === TABLE) _ref9 = (_result = result, DecoTable({
         read: x => typeof x === NUM ? mag.format(x) : decoFlat(x)
       })(_result)), says['corona latest report'].br(scope)(_ref9);
-      if (format === SAMPLES) _ref10 = (_result2 = result, decoSamples(_result2)), says['corona latest report'](_ref10);
+      if (format === SAMPLES) _ref10 = (_result2 = result, decoSamples(_result2)), says['corona latest report'].br(scope)(_ref10);
     });
     _ref11 = '', logger(_ref11);
   }

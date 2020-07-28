@@ -6,7 +6,7 @@ import { decoFlat }                                        from '@spare/deco-fla
 import { decoSamples, decoTable, DecoTable, logger, says } from '@spare/logger'
 import { Xr }                                              from '@spare/xr'
 import { NUM }                                             from '@typen/enum-data-types'
-import { now }                                             from '@valjoux/timestamp'
+import { time }                                            from '@valjoux/timestamp-pretty'
 import { range }                                           from '@vect/vector-init'
 import { zipper }                                          from '@vect/vector-zipper'
 import CFonts                                              from 'cfonts'
@@ -47,7 +47,7 @@ const COLORED_RANGE200 = fluoVector(RANGE200)
 const mag = new Mag(0)
 
 export class NcovCli {
-  static async start () {
+  static async start() {
     CFonts.say('NCOV update', {
       font: 'simple',             // define the font face
       background: 'transparent',  // define the background color, you can also use `backgroundColor` here as key
@@ -69,9 +69,9 @@ export class NcovCli {
       ]
     }])
     if (scope === STAT) {
-      const spn = ora(Xr('updating')['timestamp'](now()).toString()).start()
+      const spn = ora(Xr('updating').timestamp(time()).toString()).start()
       const table = await Ncov.global({ top: 0 })
-      spn.succeed(Xr('updated')['scope'](scope)['timestamp'](now()).toString())
+      spn.succeed(Xr('updated').scope(scope).timestamp(time()).toString())
       const { fields } = await inquirer.prompt([{
         name: 'fields',
         type: CHECKBOX,
@@ -80,7 +80,7 @@ export class NcovCli {
           { name: 'show today', checked: false, value: TODAY_FIELDS_GLOBAL },
           { name: 'show details', checked: false, value: DETAIL_FIELDS_GLOBAL },
         ],
-        filter (answers) { return [].concat(...answers) }
+        filter(answers) { return [].concat(...answers) }
       }])
       const { sortBy } = await inquirer.prompt([{
         name: 'sortBy',
@@ -103,7 +103,7 @@ export class NcovCli {
       type: CHECKBOX,
       message: 'Please (multiple) select additional fields.',
       choices: scope === GLOBAL ? FIELDS_CHECKBOX_OPTIONS_GLOBAL : FIELDS_CHECKBOX_OPTIONS_US,
-      filter (answers) { return scopeToBaseFields(scope).concat(...answers) }
+      filter(answers) { return scopeToBaseFields(scope).concat(...answers) }
     }])
     const { sortBy, top, format } = await inquirer.prompt([
       {
@@ -132,10 +132,10 @@ export class NcovCli {
       }
     ])
 
-    const spn = ora(Xr('updating')['sortBy'](sortBy)['top'](top)['timestamp'](now()).toString()).start()
+    const spn = ora(Xr('updating')['sortBy'](sortBy)['top'](top)['timestamp'](time()).toString()).start()
     await Ncov[scope]({ format, sortBy, top, fields })
       .then(result => {
-        spn.succeed(Xr('updated')['scope'](scope)['timestamp'](now()).toString())
+        spn.succeed(Xr('updated')['scope'](scope)['timestamp'](time()).toString())
         if (format === TABLE) result
           |> DecoTable({ read: x => typeof x === NUM ? mag.format(x) : decoFlat(x) })
           |> says['corona latest report'].br(scope)

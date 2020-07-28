@@ -1,8 +1,16 @@
-import { CASES, ID, COUNTRY_INFO, DEATH_RATE, DEATHS, DEATHS_MILLION, UPDATED } from '../../resources/constants/constants.fields'
-import { Table } from '@analys/table'
 import { samplesToTable } from '@analys/convert'
-import { NUM_DESC } from '@aryth/comparer'
-import { MUTABLE } from '@analys/enum-mutabilities'
+import { MUTABLE }        from '@analys/enum-mutabilities'
+import { Table }          from '@analys/table'
+import { NUM_DESC }       from '@aryth/comparer'
+import {
+  CASES,
+  COUNTRY_INFO,
+  DEATH_RATE,
+  DEATHS,
+  DEATHS_MILLION,
+  ID,
+  UPDATED
+}                         from '../../resources/constants/constants.fields'
 
 export const prep = function (samples, { sortBy, top, fields }) {
   const table = Table

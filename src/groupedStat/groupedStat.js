@@ -1,6 +1,7 @@
+import { LEFT }                                                 from '@analys/enum-join-modes'
 import { COUNT, INCRE }                                         from '@analys/enum-pivot-mode'
 import { Table }                                                from '@analys/table'
-import { LEFT, tableJoin }                                      from '@analys/table-join'
+import { tableJoin }                                            from '@analys/table-join'
 import { NUM_DESC }                                             from '@aryth/comparer'
 import { init, iso, pair }                                      from '@vect/object-init'
 import { CASES, CASES_MILLION, DEATH_RATE, DEATHS_MILLION, ID } from '../../resources/constants/constants.fields'

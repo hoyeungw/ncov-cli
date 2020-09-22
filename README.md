@@ -29,7 +29,7 @@
 ![preview-global](./media/screenshot.png)
 
 #### Features
-- Latest update on all countries.
+- Latest update on all CountryTable.
 - Sort by columns.
 - Highlight values based on rank. 
 - Interactive command-line interface(cli).

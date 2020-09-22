@@ -2,12 +2,12 @@ import { tableToSamples }      from '@analys/convert'
 import { LEFT }                from '@analys/enum-join-modes'
 import { tableJoin }           from '@analys/table-join'
 import { decoSamples, logger } from '@spare/logger'
-import { countries }           from '../resources/data/countries'
-import { populations }         from '../resources/data/populations'
+import { CountryTable }        from '../resources/data/countryTable'
+import { PopulationTable }     from '../resources/data/PopulationTable'
 
 /** @typedef {number|string} str */
 
-const joinedTable = tableJoin(countries, populations, ['id'], LEFT)
+const joinedTable = tableJoin(CountryTable, PopulationTable, ['id'], LEFT)
 
 // joinedTable |> decoTable |> logger
 

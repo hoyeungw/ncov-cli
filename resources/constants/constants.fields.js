@@ -2,6 +2,7 @@ export const
   STATE = 'state',
   COUNTRY = 'country',
   COUNTRY_INFO = 'countryInfo',
+  CONTINENT = 'continent',
   CASES = 'cases',
   DEATHS = 'deaths',
   RECOVERED = 'recovered',

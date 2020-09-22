@@ -1,4 +1,4 @@
-export const populations = {
+export const PopulationTable = {
   head: ['id', 'date', 'population'], 
   rows: [
     ['ABW', 2019,     106314], 

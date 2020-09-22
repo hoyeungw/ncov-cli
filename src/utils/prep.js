@@ -16,7 +16,7 @@ export const prep = function (samples, { sortBy, top, fields }) {
   const table = Table
     .from(samplesToTable(samples, fields))
     .pushColumn(DEATH_RATE, samples.map(s => (s[DEATHS] / s[CASES] * 100)?.toFixed(2)))
-  if (table.head.includes(COUNTRY_INFO)) table.unshiftColumn(ID, samples.map(getCountryIso)).spliceColumns([COUNTRY_INFO], MUTABLE)
+  if (table.head.includes(COUNTRY_INFO)) table.unshiftColumn(ID, samples.map(getCountryIso)).deleteColumn([COUNTRY_INFO], MUTABLE)
   if (table.head.includes(UPDATED)) table.mutateColumn(UPDATED, x => new Date(x))
   if (table.head.includes(DEATHS_MILLION)) table.mutateColumn(DEATHS_MILLION, x => x?.toFixed(2))
   if (table.head.includes(sortBy)) table.sort(sortBy, NUM_DESC, MUTABLE)

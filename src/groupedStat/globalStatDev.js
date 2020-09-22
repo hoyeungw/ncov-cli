@@ -19,8 +19,8 @@ import {
 }                              from '../../resources/constants/constants.fields'
 import { INCOMELEVEL, REGION } from '../../resources/constants/rawOuterFields'
 import { IncomeLevels }        from '../../resources/data/IncomeLevels'
-import { Regions }             from '../../resources/data/Regions'
-import { c12ns }               from '../utils/c12ns'
+import { Regions }                  from '../../resources/data/Regions'
+import { ConsolidatedCountryTable } from '../../resources/data/ConsolidatedCountryTable'
 
 const Filters = {
   get numeric() { return { population: isNumeric, cases: isNumeric } }
@@ -62,7 +62,7 @@ const Fields = {
 
 export const regionByIncomeLevelCrosTab = async (dataTable) => {
   // const dataTable = await Ncov.global({ top: 0 })
-  const table = tableJoin(dataTable, c12ns, [ID], LEFT) |> Table.from
+  const table = tableJoin(dataTable, ConsolidatedCountryTable, [ID], LEFT) |> Table.from
   const crostab = table.crosTab({
     side: REGION,
     banner: INCOMELEVEL,
@@ -77,7 +77,7 @@ export const regionByIncomeLevelCrosTab = async (dataTable) => {
 
 export const regionsStat = async (dataTable) => {
   // const dataTable = await Ncov.global({ top: 0 })
-  const table = tableJoin(dataTable, c12ns, [ID], LEFT) |> Table.from
+  const table = tableJoin(dataTable, ConsolidatedCountryTable, [ID], LEFT) |> Table.from
   let t = chipStat(table, { ...Fields.regionSet, ...Formulas.count })
   t = tableJoin(t, chipStat(table, { ...Fields.regionSet, ...Formulas.cases }), [REGION], LEFT)
   t = tableJoin(t, chipStat(table, { ...Fields.regionSet, ...Formulas.deaths }), [REGION], LEFT)
@@ -90,7 +90,7 @@ export const regionsStat = async (dataTable) => {
 
 export const incomeLevelsStat = async (dataTable) => {
   // const dataTable = await Ncov.global({ top: 0 })
-  const table = tableJoin(dataTable, c12ns, [ID], LEFT) |> Table.from
+  const table = tableJoin(dataTable, ConsolidatedCountryTable, [ID], LEFT) |> Table.from
   let t = chipStat(table, { ...Fields.incomeLevelSet, ...Formulas.count })
   t = tableJoin(t, chipStat(table, { ...Fields.incomeLevelSet, ...Formulas.cases }), [INCOMELEVEL], LEFT)
   t = tableJoin(t, chipStat(table, { ...Fields.incomeLevelSet, ...Formulas.deaths }), [INCOMELEVEL], LEFT)

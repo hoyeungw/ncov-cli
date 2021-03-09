@@ -4,10 +4,8 @@ import { Table } from '@analys/table';
 import { Mag } from '@cliche/mag';
 import { Cards } from '@palett/cards';
 import { fluoVector } from '@palett/fluo-vector';
-import { decoFlat } from '@spare/deco-flat';
-import { says, decoTable, deco, DecoTable } from '@spare/logger';
+import { says, decoTable, DecoTable } from '@spare/logger';
 import { Xr } from '@spare/xr';
-import { NUM } from '@typen/enum-data-types';
 import { time } from '@valjoux/timestamp-pretty';
 import { range } from '@vect/vector-init';
 import { zipper } from '@vect/vector-zipper';
@@ -255,11 +253,11 @@ const LIST = 'list',
       CHECKBOX = 'checkbox';
 const RANGE200 = range(1, 200);
 const COLORED_RANGE200 = fluoVector(RANGE200);
-const mag = new Mag(0);
+new Mag(0);
 const logger = says['ncov-cli'].attach(time);
 class NcovCli {
   static async start() {
-    var _ref, _ref11;
+    var _ref, _ref10;
 
     CFonts.say('NCOV update', {
       font: 'simple',
@@ -384,7 +382,7 @@ class NcovCli {
     } = await inquirer.prompt({
       name: 'top',
       type: LIST,
-      default: 49,
+      default: 79,
       message: 'Narrow down to only top CountryTable?',
       choices: zipper(COLORED_RANGE200, RANGE200, (name, value) => ({
         name,
@@ -398,16 +396,14 @@ class NcovCli {
       top,
       fields
     }).then(table => {
-      var _ref9, _table, _ref10, _table2;
+      var _ref9, _table;
 
       spn.succeed(Xr('ncov-cli').p(time()).p('updated').scope(scope).toString());
       if (scope === GLOBAL) table = Table.from(table).join(countryTable, ['id'], LEFT);
-      _ref9 = (_table = table, deco(_table)), logger(_ref9);
-      _ref10 = (_table2 = table, DecoTable({
-        read: x => typeof x === NUM ? mag.format(x) : decoFlat(x)
-      })(_table2)), logger.br(scope)(_ref10);
+      _ref9 = (_table = table, DecoTable()(_table) // { read: x => typeof x === NUM ? mag.format(x) : decoFlat(x) }
+      ), logger.br(scope)(_ref9);
     });
-    _ref11 = '', logger(_ref11);
+    _ref10 = '', logger(_ref10);
   }
 
 }

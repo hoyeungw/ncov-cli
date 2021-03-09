@@ -5,13 +5,11 @@ Object.defineProperty(exports, '__esModule', { value: true });
 var enumJoinModes = require('@analys/enum-join-modes');
 var enumTabularTypes = require('@analys/enum-tabular-types');
 var table = require('@analys/table');
-var mag$1 = require('@cliche/mag');
+var mag = require('@cliche/mag');
 var cards = require('@palett/cards');
 var fluoVector = require('@palett/fluo-vector');
-var decoFlat = require('@spare/deco-flat');
 var logger$1 = require('@spare/logger');
 var xr = require('@spare/xr');
-var enumDataTypes = require('@typen/enum-data-types');
 var timestampPretty = require('@valjoux/timestamp-pretty');
 var vectorInit = require('@vect/vector-init');
 var vectorZipper = require('@vect/vector-zipper');
@@ -265,11 +263,11 @@ const LIST = 'list',
       CHECKBOX = 'checkbox';
 const RANGE200 = vectorInit.range(1, 200);
 const COLORED_RANGE200 = fluoVector.fluoVector(RANGE200);
-const mag = new mag$1.Mag(0);
+new mag.Mag(0);
 const logger = logger$1.says['ncov-cli'].attach(timestampPretty.time);
 class NcovCli {
   static async start() {
-    var _ref, _ref11;
+    var _ref, _ref10;
 
     CFonts__default['default'].say('NCOV update', {
       font: 'simple',
@@ -394,7 +392,7 @@ class NcovCli {
     } = await inquirer__default['default'].prompt({
       name: 'top',
       type: LIST,
-      default: 49,
+      default: 79,
       message: 'Narrow down to only top CountryTable?',
       choices: vectorZipper.zipper(COLORED_RANGE200, RANGE200, (name, value) => ({
         name,
@@ -408,16 +406,14 @@ class NcovCli {
       top,
       fields
     }).then(table$1 => {
-      var _ref9, _table, _ref10, _table2;
+      var _ref9, _table;
 
       spn.succeed(xr.Xr('ncov-cli').p(timestampPretty.time()).p('updated').scope(scope).toString());
       if (scope === GLOBAL) table$1 = table.Table.from(table$1).join(countryTable, ['id'], enumJoinModes.LEFT);
-      _ref9 = (_table = table$1, logger$1.deco(_table)), logger(_ref9);
-      _ref10 = (_table2 = table$1, logger$1.DecoTable({
-        read: x => typeof x === enumDataTypes.NUM ? mag.format(x) : decoFlat.decoFlat(x)
-      })(_table2)), logger.br(scope)(_ref10);
+      _ref9 = (_table = table$1, logger$1.DecoTable()(_table) // { read: x => typeof x === NUM ? mag.format(x) : decoFlat(x) }
+      ), logger.br(scope)(_ref9);
     });
-    _ref11 = '', logger(_ref11);
+    _ref10 = '', logger(_ref10);
   }
 
 }

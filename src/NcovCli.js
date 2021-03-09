@@ -1,19 +1,17 @@
-import { LEFT }                             from '@analys/enum-join-modes'
-import { TABLE }                            from '@analys/enum-tabular-types'
-import { Table }                            from '@analys/table'
-import { Mag }                              from '@cliche/mag'
-import { Cards }                            from '@palett/cards'
-import { fluoVector }                       from '@palett/fluo-vector'
-import { decoFlat }                         from '@spare/deco-flat'
-import { deco, decoTable, DecoTable, says } from '@spare/logger'
-import { Xr }                               from '@spare/xr'
-import { NUM }                              from '@typen/enum-data-types'
-import { time }                             from '@valjoux/timestamp-pretty'
-import { range }                            from '@vect/vector-init'
-import { zipper }                           from '@vect/vector-zipper'
-import CFonts                               from 'cfonts'
-import inquirer                             from 'inquirer'
-import ora                                  from 'ora'
+import { LEFT }                       from '@analys/enum-join-modes'
+import { TABLE }                      from '@analys/enum-tabular-types'
+import { Table }                      from '@analys/table'
+import { Mag }                        from '@cliche/mag'
+import { Cards }                      from '@palett/cards'
+import { fluoVector }                 from '@palett/fluo-vector'
+import { decoTable, DecoTable, says } from '@spare/logger'
+import { Xr }                         from '@spare/xr'
+import { time }                       from '@valjoux/timestamp-pretty'
+import { range }                      from '@vect/vector-init'
+import { zipper }                     from '@vect/vector-zipper'
+import CFonts                         from 'cfonts'
+import inquirer                       from 'inquirer'
+import ora                            from 'ora'
 import {
   CASES,
   CASES_MILLION,
@@ -21,28 +19,28 @@ import {
   DEATH_RATE,
   DEATHS,
   DEATHS_MILLION
-}                                           from '../resources/constants/constants.fields'
+}                                     from '../resources/constants/constants.fields'
 import {
   GLOBAL,
   STAT,
   USA
-}                                           from '../resources/constants/constants.scope'
-import { countryTable }                     from '../resources/constants/countryInfos'
+}                                     from '../resources/constants/constants.scope'
+import { countryTable }               from '../resources/constants/countryInfos'
 import {
   DETAIL_FIELDS_GLOBAL,
   FIELDS_CHECKBOX_OPTIONS_GLOBAL,
   TODAY_FIELDS_GLOBAL
-}                                           from '../resources/constants/fieldsGlobal'
-import { FIELDS_CHECKBOX_OPTIONS_US }       from '../resources/constants/fieldsUs'
+}                                     from '../resources/constants/fieldsGlobal'
+import { FIELDS_CHECKBOX_OPTIONS_US } from '../resources/constants/fieldsUs'
 import {
   ADMINREGION,
   INCOMELEVEL,
   POPULATION,
   REGION
-}                                           from '../resources/constants/rawOuterFields'
-import { groupedStat }                      from './groupedStat/groupedStat'
-import { Ncov }                             from './Ncov'
-import { scopeToBaseFields }                from './utils/scopeToBaseFields'
+}                                     from '../resources/constants/rawOuterFields'
+import { groupedStat }                from './groupedStat/groupedStat'
+import { Ncov }                       from './Ncov'
+import { scopeToBaseFields }          from './utils/scopeToBaseFields'
 
 const LIST = 'list', CHECKBOX = 'checkbox', TODAY = 'today', RATIO = 'ratio'
 const RANGE200 = range(1, 200)
@@ -119,7 +117,7 @@ export class NcovCli {
     const { top } = await inquirer.prompt({
       name: 'top',
       type: LIST,
-      default: 49,
+      default: 79,
       message: 'Narrow down to only top CountryTable?',
       choices: zipper(COLORED_RANGE200, RANGE200, (name, value) => ({ name, value }))
     })
@@ -128,9 +126,8 @@ export class NcovCli {
       .then(table => {
         spn.succeed(Xr('ncov-cli').p(time()).p('updated').scope(scope).toString())
         if (scope === GLOBAL) table = Table.from(table).join(countryTable, ['id'], LEFT)
-        table |> deco |> logger
         table
-          |> DecoTable({ read: x => typeof x === NUM ? mag.format(x) : decoFlat(x) })
+          |> DecoTable() // { read: x => typeof x === NUM ? mag.format(x) : decoFlat(x) }
           |> logger.br(scope)
       })
     '' |> logger

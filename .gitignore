@@ -1,4 +1,11 @@
 node_modules
 .idea
+.yarn/*
+#!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 yarn.lock
 lerna-debug.log

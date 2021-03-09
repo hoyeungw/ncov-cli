@@ -2,8 +2,9 @@ import { tableToSamples }      from '@analys/convert'
 import { LEFT }                from '@analys/enum-join-modes'
 import { tableJoin }           from '@analys/table-join'
 import { decoSamples, logger } from '@spare/logger'
-import { CountryTable }        from '../resources/data/countryTable'
-import { PopulationTable }     from '../resources/data/PopulationTable'
+import { CountryTable }        from '@volks/worldbank-countries'
+
+import { PopulationTable } from '../resources/data/PopulationTable'
 
 /** @typedef {number|string} str */
 

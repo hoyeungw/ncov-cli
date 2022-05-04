@@ -1,6 +1,6 @@
 {
   "name": "ncov-cli",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "latest update of the coronavirus(ncov) data through interactive cli",
   "main": "dist/index.cjs",
   "exports": {
@@ -51,7 +51,7 @@
     "@volks/worldbank-countries": "^0.1.13",
     "cfonts": "^2.10.1",
     "inquirer": "^8.2.4",
-    "ora": "^6.1.0"
+    "ora": "^5.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.17.10",

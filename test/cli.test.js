@@ -1,5 +1,5 @@
-import { NcovCli } from '../src/NcovCli'
+import { Cli } from '../src/Cli'
 
-NcovCli.start().then()
+Cli.start().then()
 
 // node -r @babel/register test/cli.test.js

@@ -1,15 +1,16 @@
 import { tableToSamples }      from '@analys/convert'
 import { LEFT }                from '@analys/enum-join-modes'
 import { tableJoin }           from '@analys/table-join'
-import { decoSamples, logger } from '@spare/logger'
-import { CountryTable }        from '@volks/worldbank-countries'
+import { Algebra }                        from '@analyz/table-algebra'
+import { decoSamples, decoTable, logger } from '@spare/logger'
+import { CountryTable }                   from '@volks/worldbank-countries'
 
-import { PopulationTable } from '../resources/data/PopulationTable'
+import { PopulationTable } from '../resources/PopulationTable'
 
 /** @typedef {number|string} str */
 
-const joinedTable = tableJoin(CountryTable, PopulationTable, ['id'], LEFT)
+const table = Algebra.join(LEFT, [ 'id' ], '', CountryTable, PopulationTable)
 
-// joinedTable |> decoTable |> logger
+table |> decoTable |> logger
 
-joinedTable |> tableToSamples |> decoSamples |> logger
+// table |> tableToSamples |> decoSamples |> logger

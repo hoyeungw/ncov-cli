@@ -13,7 +13,7 @@ import {
   ID,
   RECOVERED,
   UPDATED
-} from './constants.fields'
+} from './fields'
 
 export const BASE_FIELDS_GLOBAL = [
   ID,

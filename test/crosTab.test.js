@@ -1,7 +1,7 @@
 import { says }                                                      from '@palett/says'
 import { decoCrostab, decoTable }                                    from '@spare/logger'
-import { INCOMELEVEL, REGION }                                       from '../resources/constants/rawOuterFields'
-import { incomeLevelsStat, regionByIncomeLevelCrosTab, regionsStat } from '../src/groupedStat/globalStatDev'
+import { INCOMELEVEL, REGION }                                       from '../constants/rawOuterFields'
+import { incomeLevelsStat, regionByIncomeLevelCrosTab, regionsStat } from '../src/statistics/globalStatDev'
 // import { incomeLevelsStat, regionByIncomeLevelCrosTab, regionsStat } from '../src/derivatives'
 import { Ncov }                                                      from '../src/Ncov'
 

@@ -13,7 +13,7 @@ import {
   RECOVERED,
   STATE,
   UPDATED
-} from './constants.fields'
+} from './fields'
 
 export const FIELDS_GLOBAL = [
   ['updated', UPDATED],

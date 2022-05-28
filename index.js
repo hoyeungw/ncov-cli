@@ -1,1 +1,1 @@
-export { NcovCli } from './src/NcovCli'
+export { Cli } from './src/Cli'

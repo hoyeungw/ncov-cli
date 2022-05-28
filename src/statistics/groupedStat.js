@@ -5,20 +5,20 @@ import { tableJoin }                                            from '@analys/ta
 import { NUM_DESC }                                             from '@aryth/comparer'
 import { init, iso, pair }                                      from '@vect/object-init'
 import { AdminRegions, IncomeLevels, LendingTypes, Regions }    from '@volks/worldbank-countries'
-import { CASES, CASES_MILLION, DEATH_RATE, DEATHS_MILLION, ID } from '../../resources/constants/constants.fields'
-import { ADMINREGION, INCOMELEVEL, LENDTYPE, REGION } from '../../resources/constants/rawOuterFields'
-import { ConsolidatedCountryTable }                   from '../../resources/data/ConsolidatedCountryTable'
+import { CASES, CASES_MILLION, DEATH_RATE, DEATHS_MILLION, ID } from '../../constants/fields'
+import { ADMINREGION, INCOMELEVEL, LENDTYPE, REGION }           from '../../constants/rawOuterFields'
+import { ConsolidatedCountryTable }                             from '../../resources/ConsolidatedCountryTable'
 
 const GroupLabels = init([
-  [REGION, Regions],
-  [ADMINREGION, AdminRegions],
-  [INCOMELEVEL, IncomeLevels],
-  [LENDTYPE, LendingTypes]
+  [ REGION, Regions ],
+  [ ADMINREGION, AdminRegions ],
+  [ INCOMELEVEL, IncomeLevels ],
+  [ LENDTYPE, LendingTypes ]
 ])
 
-export const groupedStat = async (table, { groupBy = REGION, sortBy = CASES, restFields = [] } = {}) => {
+export const groupedStat = async (table, {groupBy = REGION, sortBy = CASES, restFields = []} = {}) => {
   table = Table
-    .from(tableJoin(table, ConsolidatedCountryTable, [ID], LEFT))
+    .from(tableJoin(table, ConsolidatedCountryTable, [ ID ], LEFT))
     .group({
       key: groupBy,
       field: {
@@ -31,9 +31,9 @@ export const groupedStat = async (table, { groupBy = REGION, sortBy = CASES, res
       filter: pair(groupBy, x => !!x)
     })
     .formula(init([
-        [CASES_MILLION, (cases, population) => (cases / population * 1E+6).toFixed(2)],
-        [DEATHS_MILLION, (deaths, population) => (deaths / population * 1E+6).toFixed(2)],
-        [DEATH_RATE, (cases, deaths) => (deaths / cases * 100).toFixed(2)],
+        [ CASES_MILLION, (cases, population) => (cases / population * 1E+6).toFixed(2) ],
+        [ DEATHS_MILLION, (deaths, population) => (deaths / population * 1E+6).toFixed(2) ],
+        [ DEATH_RATE, (cases, deaths) => (deaths / cases * 100).toFixed(2) ],
       ])
     )
   if (groupBy in GroupLabels) table.mutateColumn(groupBy, x => GroupLabels[groupBy][x])

@@ -1,8 +1,8 @@
 import { says }                                       from '@palett/says'
 import { decoTable }                                  from '@spare/logger'
-import { DEATHS }                                     from '../resources/constants/constants.fields'
-import { ADMINREGION, INCOMELEVEL, LENDTYPE, REGION } from '../resources/constants/rawOuterFields'
-import { groupedStat }                                from '../src/groupedStat/groupedStat'
+import { DEATHS }                                     from '../constants/fields'
+import { ADMINREGION, INCOMELEVEL, LENDTYPE, REGION } from '../constants/rawOuterFields'
+import { groupedStat }                                from '../src/statistics/groupedStat'
 import { Ncov }                                       from '../src/Ncov'
 
 export const test = async () => {

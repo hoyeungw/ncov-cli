@@ -1,5 +1,5 @@
 import { decoTable, logger }  from '@spare/logger'
-import { BASE_FIELDS_GLOBAL } from '../resources/constants/fieldsGlobal'
+import { BASE_FIELDS_GLOBAL } from '../constants/fieldsGlobal'
 import { Ncov }               from '../src/Ncov'
 
 const test = async () => {

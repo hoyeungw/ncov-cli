@@ -1,6 +1,6 @@
 {
   "name": "ncov-cli",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "latest update of the coronavirus(ncov) data through interactive cli",
   "main": "./dist/index.cjs",
   "exports": {

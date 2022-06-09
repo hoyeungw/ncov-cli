@@ -1,33 +1,42 @@
-import { Acq }                                                                  from '@acq/acq'
-import { samplesToTable }                                                       from '@analys/convert'
-import { TABLE }                                                                from '@analys/enum-tabular-types'
-import { Table }                                                                from '@analyz/table'
-import { NUM_DESC }                                                             from '@aryth/comparer'
-import { CASES, COUNTRY_INFO, DEATH_RATE, DEATHS, DEATHS_MILLION, ID, UPDATED } from '../constants/fields'
-import { FIELDS_GLOBAL, FIELDS_US }                                             from '../constants/rawFields'
-import { BASE }                                                                 from '../constants/urls'
+import { Acq }                                                                           from '@acq/acq'
+import { samplesToTable }                                                                from '@analys/convert'
+import { TABLE }                                                                         from '@analys/enum-tabular-types'
+import { Table }                                                                         from '@analyz/table'
+import { NUM_DESC }                                                                      from '@aryth/comparer'
+import { CASES, COUNTRY, COUNTRY_INFO, DEATH_RATE, DEATHS, DEATHS_MILLION, ID, UPDATED } from '../constants/fields'
+import { FIELDS_GLOBAL, FIELDS_US }                                                      from '../constants/rawFields'
+import { BASE }                                                                          from '../constants/urls'
+import {
+  renameCountry
+}                                                                                        from './infrastructure/renameCountry'
 
 export class Ncov {
-  static async global({sortBy = 'cases', top = 15, fields} = {}) {
+  static async global({ sortBy = 'cases', top = 15, fields } = {}) {
     return await Acq.tabular({
       title: 'ncov.global',
       url: `${BASE}/countries`,
       prep,
-      args: {sortBy, top, fields: FIELDS_GLOBAL},
+      args: { sortBy, top, fields: FIELDS_GLOBAL },
       fields,
       from: TABLE,
       to: TABLE,
     })
   }
 
-  static async usa({sortBy = 'cases', top = 15, fields} = {}) {
+  static async usa({ sortBy = 'cases', top = 15, fields } = {}) {
     return await Acq.tabular({
-      title: 'ncov.us', url: `${BASE}/states`, prep, args: {sortBy, top, fields: FIELDS_US}, fields, from: TABLE, to: TABLE
+      title: 'ncov.us',
+      url: `${BASE}/states`,
+      prep,
+      args: { sortBy, top, fields: FIELDS_US },
+      fields,
+      from: TABLE,
+      to: TABLE
     })
   }
 }
 
-export function prep(samples, {sortBy, top, fields}) {
+export function prep(samples, { sortBy, top, fields }) {
   const table = Table.from(samplesToTable(samples, fields))
   table.headward
     .prepend(ID, samples.map(getCountryIso))
@@ -37,7 +46,7 @@ export function prep(samples, {sortBy, top, fields}) {
     .mutate(DEATHS_MILLION, x => x?.toFixed(2))
   table.sort(sortBy, NUM_DESC)
   if (top) table.rows.splice(top)
-  return table
+  return table.headward.mutate(COUNTRY, renameCountry)
 }
 
 /**

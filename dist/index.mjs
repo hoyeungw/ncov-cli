@@ -4,7 +4,7 @@ import { Algebra } from '@analyz/table-algebra';
 import { Mag } from '@cliche/mag';
 import { Cards } from '@palett/cards';
 import { fluoVector } from '@palett/fluo-vector';
-import { FRESH } from '@palett/presets';
+import { FRESH, KELLY, SUBTLE } from '@palett/presets';
 import { decoTable, DecoTable } from '@spare/logger';
 import { says, Xr } from '@spare/xr';
 import { time } from '@valjoux/timestamp-pretty';
@@ -22,7 +22,7 @@ import { Table as Table$1 } from '@analyz/table';
 import { NUM_DESC } from '@aryth/comparer';
 import { COUNT, INCRE } from '@analys/enum-pivot-mode';
 import { tableJoin } from '@analys/table-join';
-import { init, iso, pair } from '@vect/object-init';
+import { init, iso, pair, ob } from '@vect/object-init';
 
 const countryTable = Table.from(CountryTable).select(['id', 'region', 'capitalCity']);
 
@@ -103,6 +103,46 @@ const FIELDS_US = [['state', STATE], ['cases', CASES], ['deaths', DEATHS], ['act
 // export const BASE = 'https://corona.lmao.ninja/v2'
 const BASE = 'https://disease.sh/v3/covid-19';
 
+const sortKeysByLength = dict => dict.sort(([a], [b]) => String(b).length - String(a).length);
+
+const makeReplaceable = function (dict) {
+  if (this !== null && this !== void 0 && this.sort) sortKeysByLength(dict);
+  Object.defineProperty(dict, Symbol.replace, {
+    value(word, after) {
+      for (let [curr, proj] of this) word = word.replace(curr, proj);
+
+      return after ? after(word) : word;
+    },
+
+    configurable: true,
+    enumerable: false
+  });
+  return dict;
+};
+
+var _ref;
+const DICT = (_ref = [[/\bSaint\b/g, 'St.'], [/\band(?:\sthe)?\b/g, '&'], [/Jamahiriya/g, 'Jam.'], [/\s*\(.*\)\s*/g, '']], makeReplaceable(_ref));
+
+const simplify = tx => {
+  const reg = /(?:People's|Democratic|Republic)\s*/gi;
+  const ms = tx.match(reg),
+        hi = (ms === null || ms === void 0 ? void 0 : ms.length) ?? 0;
+
+  if (hi <= 0) {
+    return tx;
+  }
+
+  if (hi === 1) {
+    return tx.replace(reg, wd => wd.slice(0, 3) + '.');
+  }
+
+  if (hi >= 2) {
+    return tx.replace(reg, wd => wd.charAt(0) + '.');
+  }
+};
+
+const renameCountry = tx => simplify(tx).replace(DICT);
+
 class Ncov {
   static async global({
     sortBy = 'cases',
@@ -158,7 +198,7 @@ function prep(samples, {
   })).mutate(UPDATED, x => new Date(x)).mutate(DEATHS_MILLION, x => x === null || x === void 0 ? void 0 : x.toFixed(2));
   table.sort(sortBy, NUM_DESC);
   if (top) table.rows.splice(top);
-  return table;
+  return table.headward.mutate(COUNTRY, renameCountry);
 }
 /**
  *
@@ -186,7 +226,7 @@ const groupedStat = async (table, {
   groupBy = REGION,
   sortBy = CASES,
   restFields = []
-}) => {
+} = {}) => {
   table = Table.from(tableJoin(table, ConsolidatedCountryTable, [ID], LEFT)).group({
     key: groupBy,
     field: {
@@ -197,7 +237,7 @@ const groupedStat = async (table, {
       ...iso(restFields, INCRE)
     },
     filter: pair(groupBy, x => !!x)
-  }).formula(init([[CASES_MILLION, (cases, population) => (cases / population * 1E+6).toFixed(2)], [DEATHS_MILLION, (deaths, population) => (deaths / population * 1E+6).toFixed(2)], [DEATH_RATE, (cases, deaths) => (deaths / cases * 100).toFixed(2)]]));
+  }).formula(ob([CASES_MILLION, (cases, population) => (cases / population * 1E+6).toFixed(2)], [DEATHS_MILLION, (deaths, population) => (deaths / population * 1E+6).toFixed(2)], [DEATH_RATE, (cases, deaths) => (deaths / cases * 100).toFixed(2)]));
   if (groupBy in GroupLabels) table.mutateColumn(groupBy, x => GroupLabels[groupBy][x]);
   if (sortBy) table.sort(sortBy, NUM_DESC);
   return table;
@@ -361,7 +401,9 @@ class Cli {
         table = Algebra.join(LEFT, ['id'], '', table, countryTable);
       }
 
-      _ref9 = (_table = table, DecoTable()(_table) // { read: x => typeof x === NUM ? mag.format(x) : decoFlat(x) }
+      _ref9 = (_table = table, DecoTable({
+        presets: [FRESH, KELLY, SUBTLE]
+      })(_table) // { read: x => typeof x === NUM ? mag.format(x) : decoFlat(x) }
       ), says[NCOV_CLI].br(scope)(_ref9);
     });
     _ref10 = '', says[NCOV_CLI](_ref10);

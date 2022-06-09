@@ -1,9 +1,7 @@
-import { tableToSamples }      from '@analys/convert'
-import { LEFT }                from '@analys/enum-join-modes'
-import { tableJoin }           from '@analys/table-join'
-import { Algebra }                        from '@analyz/table-algebra'
-import { decoSamples, decoTable, logger } from '@spare/logger'
-import { CountryTable }                   from '@volks/worldbank-countries'
+import { LEFT }              from '@analys/enum-join-modes'
+import { Algebra }           from '@analyz/table-algebra'
+import { decoTable, logger } from '@spare/logger'
+import { CountryTable }      from '@volks/worldbank-countries'
 
 import { PopulationTable } from '../resources/PopulationTable'
 

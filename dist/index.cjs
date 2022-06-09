@@ -113,6 +113,46 @@ const FIELDS_US = [['state', STATE], ['cases', CASES], ['deaths', DEATHS], ['act
 // export const BASE = 'https://corona.lmao.ninja/v2'
 const BASE = 'https://disease.sh/v3/covid-19';
 
+const sortKeysByLength = dict => dict.sort(([a], [b]) => String(b).length - String(a).length);
+
+const makeReplaceable = function (dict) {
+  if (this !== null && this !== void 0 && this.sort) sortKeysByLength(dict);
+  Object.defineProperty(dict, Symbol.replace, {
+    value(word, after) {
+      for (let [curr, proj] of this) word = word.replace(curr, proj);
+
+      return after ? after(word) : word;
+    },
+
+    configurable: true,
+    enumerable: false
+  });
+  return dict;
+};
+
+var _ref;
+const DICT = (_ref = [[/\bSaint\b/g, 'St.'], [/\band(?:\sthe)?\b/g, '&'], [/Jamahiriya/g, 'Jam.'], [/\s*\(.*\)\s*/g, '']], makeReplaceable(_ref));
+
+const simplify = tx => {
+  const reg = /(?:People's|Democratic|Republic)\s*/gi;
+  const ms = tx.match(reg),
+        hi = (ms === null || ms === void 0 ? void 0 : ms.length) ?? 0;
+
+  if (hi <= 0) {
+    return tx;
+  }
+
+  if (hi === 1) {
+    return tx.replace(reg, wd => wd.slice(0, 3) + '.');
+  }
+
+  if (hi >= 2) {
+    return tx.replace(reg, wd => wd.charAt(0) + '.');
+  }
+};
+
+const renameCountry = tx => simplify(tx).replace(DICT);
+
 class Ncov {
   static async global({
     sortBy = 'cases',
@@ -168,7 +208,7 @@ function prep(samples, {
   })).mutate(UPDATED, x => new Date(x)).mutate(DEATHS_MILLION, x => x === null || x === void 0 ? void 0 : x.toFixed(2));
   table.sort(sortBy, comparer.NUM_DESC);
   if (top) table.rows.splice(top);
-  return table;
+  return table.headward.mutate(COUNTRY, renameCountry);
 }
 /**
  *
@@ -196,7 +236,7 @@ const groupedStat = async (table$1, {
   groupBy = REGION,
   sortBy = CASES,
   restFields = []
-}) => {
+} = {}) => {
   table$1 = table.Table.from(tableJoin.tableJoin(table$1, ConsolidatedCountryTable, [ID], enumJoinModes.LEFT)).group({
     key: groupBy,
     field: {
@@ -207,7 +247,7 @@ const groupedStat = async (table$1, {
       ...objectInit.iso(restFields, enumPivotMode.INCRE)
     },
     filter: objectInit.pair(groupBy, x => !!x)
-  }).formula(objectInit.init([[CASES_MILLION, (cases, population) => (cases / population * 1E+6).toFixed(2)], [DEATHS_MILLION, (deaths, population) => (deaths / population * 1E+6).toFixed(2)], [DEATH_RATE, (cases, deaths) => (deaths / cases * 100).toFixed(2)]]));
+  }).formula(objectInit.ob([CASES_MILLION, (cases, population) => (cases / population * 1E+6).toFixed(2)], [DEATHS_MILLION, (deaths, population) => (deaths / population * 1E+6).toFixed(2)], [DEATH_RATE, (cases, deaths) => (deaths / cases * 100).toFixed(2)]));
   if (groupBy in GroupLabels) table$1.mutateColumn(groupBy, x => GroupLabels[groupBy][x]);
   if (sortBy) table$1.sort(sortBy, comparer.NUM_DESC);
   return table$1;
@@ -371,7 +411,9 @@ class Cli {
         table = tableAlgebra.Algebra.join(enumJoinModes.LEFT, ['id'], '', table, countryTable);
       }
 
-      _ref9 = (_table = table, logger.DecoTable()(_table) // { read: x => typeof x === NUM ? mag.format(x) : decoFlat(x) }
+      _ref9 = (_table = table, logger.DecoTable({
+        presets: [presets.FRESH, presets.KELLY, presets.SUBTLE]
+      })(_table) // { read: x => typeof x === NUM ? mag.format(x) : decoFlat(x) }
       ), xr.says[NCOV_CLI].br(scope)(_ref9);
     });
     _ref10 = '', xr.says[NCOV_CLI](_ref10);
